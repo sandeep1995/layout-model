@@ -1,11 +1,11 @@
 import { expect } from 'chai';
-import Layout from './layout';
+import Layout from './Layout';
 
 describe('Layout', () => {
     describe('#constructor', () => {
         const measurements = {
-                width: 800,
-                height: 600
+                width: 600,
+                height: 400
             },
             settings = {
                 cut: 'horizontal',
@@ -21,7 +21,7 @@ describe('Layout', () => {
                     {
                         cut: null,
                         host: {},
-                        ratioWeight: 5,
+                        ratioWeight: 2,
                         lanes: []
                     },
                     {
@@ -32,6 +32,7 @@ describe('Layout', () => {
                     },
                 ]
             };
+
         let layout = new Layout(measurements, settings);
 
         it('should have created layout instance', () => {

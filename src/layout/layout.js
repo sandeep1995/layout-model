@@ -1,7 +1,9 @@
 /* eslint-disable require-jsdoc */
-export default class Layout {
+class Layout {
     constructor(measurements, settings) {
         this.measurements = measurements;
         this.settings = settings;
     }
 }
+
+export default Layout;
