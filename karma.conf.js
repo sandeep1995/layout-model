@@ -6,6 +6,7 @@ module.exports = function (config) {
             'test.webpack.js',
         ],
         webpack: {
+            devtool: 'inline-source-map',
             module: {
                 rules: [
                     // instrument only testing sources with Istanbul
@@ -32,7 +33,7 @@ module.exports = function (config) {
             },
         },
         preprocessors: {
-            'test.webpack.js': ['webpack'],
+            'test.webpack.js': ['webpack', 'sourcemap'],
         },
         exclude: [
             '**/*.swp',
@@ -87,3 +88,4 @@ module.exports = function (config) {
         concurrency: Infinity
     });
 };
+

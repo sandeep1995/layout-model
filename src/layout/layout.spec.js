@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import Layout from './Layout';
+import { DummyComponent } from '../utils';
 
 describe('Layout', () => {
     describe('#constructor', () => {
@@ -7,33 +8,38 @@ describe('Layout', () => {
                 width: 600,
                 height: 400
             },
-            settings = {
+
+            topComponent = new DummyComponent(measurements.width, 100),
+            middleComponent = new DummyComponent(measurements.width, 200),
+            bottomComponent = new DummyComponent(measurements.width, 100),
+
+            config = {
                 cut: 'horizontal',
                 host: null,
                 ratioWeight: null,
                 lanes: [
                     {
                         cut: null,
-                        host: {},
+                        host: topComponent,
                         ratioWeight: 1,
                         lanes: []
                     },
                     {
                         cut: null,
-                        host: {},
+                        host: middleComponent,
                         ratioWeight: 2,
                         lanes: []
                     },
                     {
                         cut: null,
-                        host: {},
+                        host: bottomComponent,
                         ratioWeight: 1,
                         lanes: []
                     },
                 ]
             };
 
-        let layout = new Layout(measurements, settings);
+        let layout = new Layout(measurements, config);
 
         it('should have created layout instance', () => {
             expect(layout).to.be.an.instanceOf(Layout);
@@ -44,7 +50,7 @@ describe('Layout', () => {
         });
 
         it('should have same layout settings', () => {
-            expect(layout.settings).to.be.deep.equals(settings);
+            expect(layout.config).to.be.deep.equals(config);
         });
     });
 });

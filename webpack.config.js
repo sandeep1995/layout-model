@@ -1,4 +1,4 @@
-const libraryName = 'fusion-lane',
+const libraryName = 'layout',
     OUT_FILE = `${libraryName}.js`;
 
 module.exports = {
