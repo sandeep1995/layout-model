@@ -1,10 +1,10 @@
 import {
-  expect
-} from 'chai';
+    expect
+  } from 'chai';
 import Layout from './Layout';
 import {
-  DummyComponent
-} from '../utils';
+    DummyComponent
+  } from '../utils';
 
 describe('Layout', () => {
     describe('#constructor', () => {
@@ -22,39 +22,37 @@ describe('Layout', () => {
                 cut: 'horizontal',
                 host: null,
                 ratioWeight: null,
-                lanes: [
-                    {
+                lanes: [{
+                    cut: null,
+                    host: topComponent,
+                    ratioWeight: 1,
+                    lanes: []
+                },
+                {
+                    cut: 'vertical',
+                    host: null,
+                    ratioWeight: 2,
+                    preferred: true,
+                    lanes: [{
                         cut: null,
-                        host: topComponent,
+                        host: middleLeftComponent,
                         ratioWeight: 1,
+                        preferred: true,
                         lanes: []
                     },
                     {
-                        cut: 'vertical',
-                        host: null,
-                        ratioWeight: 2,
-                        lanes: [
-                            {
-                                cut: null,
-                                host: middleLeftComponent,
-                                ratioWeight: 1,
-                                lanes: []
-                            },
-                            {
-                                cut: null,
-                                host: middleRightComponent,
-                                ratioWeight: 1,
-                                lanes: []
-                            }
-                        ]
-                    },
-                    {
                         cut: null,
-                        host: bottomComponent,
+                        host: middleRightComponent,
                         ratioWeight: 1,
                         lanes: []
-                    },
-                ]
+                    }]
+                },
+                {
+                    cut: null,
+                    host: bottomComponent,
+                    ratioWeight: 1,
+                    lanes: []
+                }]
             };
 
         let layout = new Layout(measurements, config);

@@ -13,7 +13,7 @@ class Layout {
             children: []
         };
 
-        this.createCellDepTree(this.configRoot);
+        // this.createCellDepTree(this.configRoot);
     }
 
     createConfigTree() {
@@ -33,9 +33,6 @@ class Layout {
         return rootCell;
     }
 
-    createCellDepTree(configRoot) {
-
-    }
 }
 
 export default Layout;
