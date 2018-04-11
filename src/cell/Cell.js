@@ -1,9 +1,10 @@
 /* eslint-disable require-jsdoc */
 class Cell {
-    constructor(width, height, position) {
+    constructor(width, height, top, left) {
         this.width = width;
         this.height = height;
-        this.position = position;
+        this.top = top;
+        this.left = left;
     }
 
     updateWidth(width) {
@@ -20,11 +21,18 @@ class Cell {
         this.height = height;
     }
 
-    updatePosition(position) {
-        if (position.top < 0 || position.left < 0) {
+    updateTop(top) {
+        if (top < 0) {
             return;
         }
-        this.position = position;
+        this.top = top;
+    }
+
+    updateLeft(left) {
+        if (left < 0) {
+            return;
+        }
+        this.left = left;
     }
 }
 

@@ -1,6 +1,10 @@
-import { expect } from 'chai';
+import {
+  expect
+} from 'chai';
 import Layout from './Layout';
-import { DummyComponent } from '../utils';
+import {
+  DummyComponent
+} from '../utils';
 
 describe('Layout', () => {
     describe('#constructor', () => {
@@ -10,8 +14,9 @@ describe('Layout', () => {
             },
 
             topComponent = new DummyComponent(measurements.width, 100),
-            middleComponent = new DummyComponent(measurements.width, 200),
             bottomComponent = new DummyComponent(measurements.width, 100),
+            middleLeftComponent = new DummyComponent(measurements.width / 2, 200),
+            middleRightComponent = new DummyComponent(measurements.width / 2, 200),
 
             config = {
                 cut: 'horizontal',
@@ -25,10 +30,23 @@ describe('Layout', () => {
                         lanes: []
                     },
                     {
-                        cut: null,
-                        host: middleComponent,
+                        cut: 'vertical',
+                        host: null,
                         ratioWeight: 2,
-                        lanes: []
+                        lanes: [
+                            {
+                                cut: null,
+                                host: middleLeftComponent,
+                                ratioWeight: 1,
+                                lanes: []
+                            },
+                            {
+                                cut: null,
+                                host: middleRightComponent,
+                                ratioWeight: 1,
+                                lanes: []
+                            }
+                        ]
                     },
                     {
                         cut: null,

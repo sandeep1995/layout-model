@@ -5,15 +5,15 @@ class Layout {
     constructor(measurements, config) {
         this.measurements = measurements;
         this.config = config;
+        this.configRoot = this.createConfigTree();
 
-        this.configTree = this.createConfigTree();
-
-        this.cellDepInitialConfig = {
-            cell: this.getRootCell(),
+        this.cellDepTree = {
+            host: null,
+            cell: null,
             children: []
         };
 
-        this.cellDepTree = this.createCellDepTree();
+        this.createCellDepTree(this.configRoot);
     }
 
     createConfigTree() {
@@ -33,8 +33,8 @@ class Layout {
         return rootCell;
     }
 
-    createCellDepTree() {
-        return new TreeModel().parse(this.cellDepInitialConfig);
+    createCellDepTree(configRoot) {
+
     }
 }
 
