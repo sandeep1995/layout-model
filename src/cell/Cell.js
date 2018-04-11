@@ -7,19 +7,23 @@ class Cell {
     }
 
     updateWidth(width) {
+        if (width < 0) {
+            return;
+        }
         this.width = width;
     }
 
     updateHeight(height) {
-        this.height = height;
-    }
-
-    resizeTo(width, height) {
-        this.width = width;
+        if (height < 0) {
+            return;
+        }
         this.height = height;
     }
 
     updatePosition(position) {
+        if (position.top < 0 || position.left < 0) {
+            return;
+        }
         this.position = position;
     }
 }
