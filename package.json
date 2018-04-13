@@ -63,7 +63,5 @@
   "directories": {
     "example": "example"
   },
-  "dependencies": {
-    "tree-model": "^1.0.6"
-  }
+  "dependencies": {}
 }

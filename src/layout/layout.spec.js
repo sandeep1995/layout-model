@@ -55,6 +55,7 @@ describe('Layout', () => {
                 }]
             };
 
+
         let layout = new Layout(measurements, config);
 
         it('should have created layout instance', () => {

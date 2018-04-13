@@ -1,25 +1,23 @@
-import TreeModel from 'tree-model';
 import Cell from '../cell';
+import Node from '../tree/Node';
 /* eslint-disable require-jsdoc */
 class Layout {
     constructor(measurements, config) {
         this.measurements = measurements;
         this.config = config;
-        this.configRoot = this.createConfigTree();
-
-        this.cellDepTree = {
-            host: null,
-            cell: null,
-            children: []
-        };
-
-        // this.createCellDepTree(this.configRoot);
+        this.configRoot = this.createConfigTree(this.config);
+        // need to create the cell tree
+        // calculate free space across nodes
+        // adjust the logical space
     }
 
-    createConfigTree() {
-        return new TreeModel({
-            childrenPropertyName: 'lanes'
-        }).parse(this.config);
+
+    createConfigTree(config) {
+        const node = new Node(config);
+        config.lanes.forEach((conf) => {
+            node.addChild(new Node(conf));
+        });
+        return node;
     }
 
     getRootCell() {
@@ -36,3 +34,4 @@ class Layout {
 }
 
 export default Layout;
+
