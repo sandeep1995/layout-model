@@ -1,47 +1,42 @@
-import { space, counter } from '../utils/';
+import { getNodeId } from '../utils';
 
-const newId = counter(1);
-/* eslint-disable require-jsdoc */
 class Node {
-    constructor (data, level) {
-        this.data = data;
+    constructor(data) {
+        this.model = data;
         this.parent = null;
         this.children = [];
-        this.history = [];
-        this.level = level;
-        this._m = null;
-        this.ratio = null;
-        this.id = `node-${newId.next().value}`;
+
+        this.boundBox = {
+            top: null,
+            left: null,
+            height: null,
+            width: null
+        };
+
+        this._id = getNodeId();
     }
 
-    addChildren (entries) {
+    addChildren(entries) {
         this.children.push(...entries);
         entries.forEach((e) => { e.parent = this; });
     }
 
-    set m (obj) {
-        this._m = {
-            width: this.data.cut === 'v' ? obj.width * this.ratio : obj.width,
-            height: this.data.cut === 'v' ? obj.height : obj.height * this.ratio
-        };
-        return this;
+    isRoot() {
+        return this.parent === null;
     }
 
-    set am (obj) {
-        this._m = {
-            width: obj.width,
-            height: obj.height
-        };
-
-        return this;
+    isLeaf() {
+        return !this.children.length;
     }
 
-    get m () {
-        return this._m;
+    getCutType() {
+        return this.model.cut;
     }
 
-    getSpaceTaken (keepConstants) {
-        return space(this, keepConstants);
+    isPreferred() {
+        return !!this.model.preferred;
     }
+
 }
+
 export default Node;

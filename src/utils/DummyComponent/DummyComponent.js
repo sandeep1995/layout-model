@@ -1,15 +1,21 @@
 /* eslint-disable require-jsdoc */
 class DummyComponent {
-    constructor(width, height) {
-        this.width = width;
-        this.height = height;
+    constructor(seed, dimensions) {
+        this.seed = seed;
+        this.dimensions = dimensions;
+        this.position = null;
     }
 
     getLogicalSpace() {
         return {
-            width: this.width,
-            height: this.height
+            width: this.dimensions.width - 2 * this.seed,
+            height: this.dimensions.height - 2 * this.seed
         };
+    }
+
+    setSpatialConfig(x, y, width, height) {
+        this.position = { top: y, left: x };
+        this.dimensions = { width, height };
     }
 }
 

@@ -6,42 +6,114 @@
  * @param {string} compareTo whom the value would be compared
  * @return {boolean} true if values are equal
  */
- function isEqualStringValue(value, compareTo) {
-     if (typeof value !== 'string' || typeof compareTo !== 'string') {
-         throw new TypeError('value and compareTo must be string');
-     }
-     return value.toLowerCase() === compareTo.toLowerCase();
- }
+function isEqual(value, compareTo) {
+    if (typeof value !== 'string' || typeof compareTo !== 'string') {
+        throw new TypeError('value and compareTo must be string');
+    }
+    return value.toLowerCase() === compareTo.toLowerCase();
+}
 
- function space(node) {
-     if (node.data.host) {
-         let host = node.data.host;
-         return host.getLogicalSpace(node.m.width, node.m.height);
-     }
+const getNodeId = (function () {
+    let _uid = 0;
+    return function () {
+        ++_uid;
+        return `node-${_uid}`;
+    };
+}());
 
-     let measurements = node.children.map(child => space(child)),
-         cut = node.children[0].data.cut;
-     if (cut === 'h') {
-         return {
-             width: Math.max(...measurements.map(m => m.width)),
-             height: measurements.reduce((carry, val) => carry + val.height, 0)
-         };
-     }
-     return {
-         width: measurements.reduce((carry, val) => carry + val.width, 0),
-         height: Math.max(...measurements.map(m => m.height))
-     };
- }
+function yExtraSpace(node) {
+    let smallestHeight = 0;
+    if (node.getCutType() === 'v') {
+        smallestHeight = smallestExtraHeightHorizontally(node);
+    } else if (node.getCutType() === 'h') {
+        node.children.forEach((child) => {
+            smallestHeight += yExtraSpace(child);
+        });
+    } else if (node.model.host && node.model.host.getLogicalSpace) {
+        let containerHeight = node.boundBox.height,
+            hostHeight = node.model.host.getLogicalSpace().height;
 
- function* counter(index) {
-     while (index) {
-         yield index++;
-     }
- }
+        smallestHeight = containerHeight - hostHeight;
+        if (smallestHeight < 0) {
+            smallestHeight = 0;
+        }
+    } else {
+        smallestHeight = 0;
+    }
+    return smallestHeight;
+}
 
+function smallestExtraHeightHorizontally(node) {
+    let smallestHeight = Number.MAX_SAFE_INTEGER;
+    node.children.forEach((child) => {
+        let h = yExtraSpace(child);
+        if (h < smallestHeight) {
+            smallestHeight = h;
+        }
+    });
+    return smallestHeight;
+}
 
- export {
-  isEqualStringValue,
-  space,
-  counter
- };
+function xExtraSpace(node) {
+    let smallestWidth = 0;
+    if (node.getCutType() === 'h') {
+        smallestWidth = smallestExtraWidthVertically(node);
+    } else if (node.getCutType() === 'v') {
+        node.children.forEach((child) => {
+            smallestWidth += xExtraSpace(child);
+        });
+    } else if (node.model.host && node.model.host.getLogicalSpace) {
+        let containerWidth = node.boundBox.width,
+            hostWidth = node.model.host.getLogicalSpace().width;
+        smallestWidth = containerWidth - hostWidth;
+        if (smallestWidth < 0) {
+            smallestWidth = 0;
+        }
+    } else {
+        smallestWidth = 0;
+    }
+    return smallestWidth;
+}
+
+function smallestExtraWidthVertically(node) {
+    let smallestWidth = Number.MAX_SAFE_INTEGER;
+    node.children.forEach((child) => {
+        let w = xExtraSpace(child);
+        if (w < smallestWidth) {
+            smallestWidth = w;
+        }
+    });
+    return smallestWidth;
+}
+
+function determineBoundBox(bb, i, arr, instance) {
+    if (i) {
+    // if not first sibling, take boundbox from previous sibling
+        let lastSibling = arr[i - 1];
+        return {
+            width: bb.width,
+            height: bb.height,
+
+            top: instance._parentCut === 'h' ?
+            lastSibling.boundBox.top + lastSibling.boundBox.height : lastSibling.boundBox.top,
+
+            left: instance._parentCut === 'h' ?
+            lastSibling.boundBox.left : lastSibling.boundBox.left + lastSibling.boundBox.width
+        };
+    }
+  // if first sibling, take boundbox from parent
+    return {
+        width: bb.width,
+        height: bb.height,
+        top: instance.parent.boundBox.top,
+        left: instance.parent.boundBox.left
+    };
+}
+
+export {
+  isEqual,
+  getNodeId,
+  yExtraSpace,
+  xExtraSpace,
+  determineBoundBox
+};

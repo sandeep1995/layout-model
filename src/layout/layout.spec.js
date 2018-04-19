@@ -1,73 +1,69 @@
-import {
-    expect
-  } from 'chai';
-import Layout from './Layout';
-import {
-    DummyComponent
-  } from '../utils';
+import { expect } from 'chai';
+import Layout from './layout';
+import Component from '../utils/dummycomponent';
 
 describe('Layout', () => {
     describe('#constructor', () => {
-        const measurements = {
-                width: 600,
-                height: 400
-            },
-
-            topComponent = new DummyComponent(measurements.width, 100),
-            bottomComponent = new DummyComponent(measurements.width, 100),
-            middleLeftComponent = new DummyComponent(measurements.width / 2, 200),
-            middleRightComponent = new DummyComponent(measurements.width / 2, 200),
-
+        const width = 600,
+            height = 600,
+            component = new Component(15, {
+                width: width / 2,
+                height: width / 2
+            }),
             config = {
-                cut: 'horizontal',
                 host: null,
-                ratioWeight: null,
+                cut: 'v',
+                ratioWeight: 1,
                 lanes: [{
-                    cut: null,
-                    host: topComponent,
-                    ratioWeight: 1,
-                    lanes: []
-                },
-                {
-                    cut: 'vertical',
                     host: null,
-                    ratioWeight: 2,
+                    cut: 'h',
+                    ratioWeight: 1,
                     preferred: true,
-                    lanes: [{
-                        cut: null,
-                        host: middleLeftComponent,
-                        ratioWeight: 1,
-                        preferred: true,
-                        lanes: []
-                    },
-                    {
-                        cut: null,
-                        host: middleRightComponent,
-                        ratioWeight: 1,
-                        lanes: []
-                    }]
+                    lanes: [
+                        {
+                            host: component,
+                            cut: null,
+                            ratioWeight: 1,
+                            preferred: true,
+                            lanes: []
+                        },
+                        {
+                            host: component,
+                            cut: null,
+                            ratioWeight: 1,
+                            lanes: []
+                        }
+                    ]
                 },
                 {
-                    cut: null,
-                    host: bottomComponent,
+                    host: null,
+                    cut: 'h',
                     ratioWeight: 1,
-                    lanes: []
-                }]
+                    lanes: [
+                        {
+                            host: component,
+                            cut: null,
+                            ratioWeight: 1,
+                            lanes: []
+                        },
+                        {
+                            host: component,
+                            cut: null,
+                            ratioWeight: 1,
+                            preferred: true,
+                            lanes: []
+                        }
+                    ]
+                }
+                ]
             };
 
+        let layout = new Layout({
+            width, height
+        }, config);
 
-        let layout = new Layout(measurements, config);
-
-        it('should have created layout instance', () => {
+        it('should be an instance of Layout', () => {
             expect(layout).to.be.an.instanceOf(Layout);
-        });
-
-        it('should have same measurements', () => {
-            expect(layout.measurements).to.be.deep.equals(measurements);
-        });
-
-        it('should have same layout settings', () => {
-            expect(layout.config).to.be.deep.equals(config);
         });
     });
 });

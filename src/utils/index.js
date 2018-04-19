@@ -1,7 +1,17 @@
-import DummyComponent from './DummyComponent';
-import { isEqualStringValue } from './utils';
+import DummyComponent from './dummycomponent';
+import {
+  isEqual,
+  getNodeId,
+  yExtraSpace,
+  xExtraSpace,
+  determineBoundBox
+} from './utils';
 
 export {
   DummyComponent,
-  isEqualStringValue
+  isEqual,
+  getNodeId,
+  yExtraSpace,
+  xExtraSpace,
+  determineBoundBox
 };
