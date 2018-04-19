@@ -6,7 +6,19 @@ describe('Layout', () => {
     describe('#constructor', () => {
         const width = 600,
             height = 600,
-            component = new Component(15, {
+            component1 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            component2 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            component3 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            component4 = new Component(10, {
                 width: width / 2,
                 height: width / 2
             }),
@@ -21,14 +33,14 @@ describe('Layout', () => {
                     preferred: true,
                     lanes: [
                         {
-                            host: component,
+                            host: component1,
                             cut: null,
                             ratioWeight: 1,
                             preferred: true,
                             lanes: []
                         },
                         {
-                            host: component,
+                            host: component2,
                             cut: null,
                             ratioWeight: 1,
                             lanes: []
@@ -41,13 +53,13 @@ describe('Layout', () => {
                     ratioWeight: 1,
                     lanes: [
                         {
-                            host: component,
+                            host: component3,
                             cut: null,
                             ratioWeight: 1,
                             lanes: []
                         },
                         {
-                            host: component,
+                            host: component4,
                             cut: null,
                             ratioWeight: 1,
                             preferred: true,
@@ -61,6 +73,8 @@ describe('Layout', () => {
         let layout = new Layout({
             width, height
         }, config);
+
+        layout.negotiate();
 
         it('should be an instance of Layout', () => {
             expect(layout).to.be.an.instanceOf(Layout);

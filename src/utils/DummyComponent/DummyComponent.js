@@ -8,8 +8,8 @@ class DummyComponent {
 
     getLogicalSpace() {
         return {
-            width: this.dimensions.width - 2 * this.seed,
-            height: this.dimensions.height - 2 * this.seed
+            width: this.dimensions.width - 1 * this.seed,
+            height: this.dimensions.height - 1 * this.seed
         };
     }
 

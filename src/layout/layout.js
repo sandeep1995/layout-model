@@ -111,21 +111,28 @@ class Layout {
         node.children.forEach((child, i, children) => {
             let boundBox = determineBoundBox(child.boundBox, i, children, child);
             child.boundBox = boundBox;
-            this.setHostSpatialConfig(child, boundBox);
             this.computePosition(child);
         });
     }
 
-    setHostSpatialConfig(node, boundBox) {
+    setHostPosition(node) {
+        node.children.forEach((child) => {
+            Layout.setHostSpatialConfig(child);
+            this.setHostPosition(child);
+        });
+    }
+
+    static setHostSpatialConfig(node) {
+        let boundBox = node.boundBox;
         if (node.model.host && node.model.host.setSpatialConfig) {
-            let { left, top, width, height } = boundBox;
-            node.model.host.setSpatialConfig(left, top, width, height);
+            node.model.host.setSpatialConfig(boundBox.left, boundBox.top, boundBox.width, boundBox.height);
         }
     }
 
     negotiate() {
         this.negotiateDimension(this.root);
         this.computePosition(this.root);
+        this.setHostPosition(this.root);
         return this;
     }
 
