@@ -70,11 +70,9 @@ describe('Layout', () => {
                 ]
             };
 
-        let layout = new Layout({
-            width, height
-        }, config);
+        let layout = new Layout({ width, height }, config);
 
-        layout.negotiate();
+        layout.negotiate().tree();
 
         it('should be an instance of Layout', () => {
             expect(layout).to.be.an.instanceOf(Layout);

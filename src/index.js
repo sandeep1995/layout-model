@@ -1,3 +1,4 @@
 import Layout from './layout';
+import { DummyComponent } from './utils';
 
-export default Layout;
+export { Layout, DummyComponent };
