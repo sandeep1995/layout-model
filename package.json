@@ -1,5 +1,5 @@
 {
-  "name": "layout",
+  "name": "layout-model",
   "version": "1.0.0",
   "description": "Easy layout management",
   "main": "dist/layout.js",
@@ -9,7 +9,7 @@
   "preferGlobal": false,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sandeep1995/layout.git"
+    "url": "git+https://github.com/sandeep1995/layout-model.git"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.44",
@@ -57,9 +57,9 @@
     "flow": "flow"
   },
   "bugs": {
-    "url": "https://github.com/sandeep1995/layout/issues"
+    "url": "https://github.com/sandeep1995/layout-model/issues"
   },
-  "homepage": "https://github.com/sandeep1995/layout#readme",
+  "homepage": "https://github.com/sandeep1995/layout-model#readme",
   "directories": {
     "example": "example"
   },
