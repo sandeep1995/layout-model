@@ -5,7 +5,7 @@ import {
   determineBoundBox
 } from '../utils';
 
-class Layout {
+class LayoutModel {
     constructor(measurements, config) {
         this.measurements = measurements;
         this.config = config;
@@ -117,7 +117,7 @@ class Layout {
 
     setHostPosition(node) {
         node.children.forEach((child) => {
-            Layout.setHostSpatialConfig(child);
+            LayoutModel.setHostSpatialConfig(child);
             this.setHostPosition(child);
         });
     }
@@ -141,4 +141,4 @@ class Layout {
     }
 }
 
-export default Layout;
+export default LayoutModel;

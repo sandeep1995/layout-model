@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import Layout from './layout';
-import Component from '../utils/dummycomponent';
+import LayoutModel from './layout-model';
+import Component from '../utils/dummy-component';
 
 describe('Layout', () => {
     describe('#constructor', () => {
@@ -70,12 +70,12 @@ describe('Layout', () => {
                 ]
             };
 
-        let layout = new Layout({ width, height }, config);
+        let layout = new LayoutModel({ width, height }, config);
 
         layout.negotiate().tree();
 
         it('should be an instance of Layout', () => {
-            expect(layout).to.be.an.instanceOf(Layout);
+            expect(layout).to.be.an.instanceOf(LayoutModel);
         });
     });
 });

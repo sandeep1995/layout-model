@@ -1,4 +1,4 @@
-import DummyComponent from './dummycomponent';
+import DummyComponent from './dummy-component';
 import {
   isEqual,
   getNodeId,

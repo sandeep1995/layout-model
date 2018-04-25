@@ -88,15 +88,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.determineBoundBox = exports.xExtraSpace = exports.yExtraSpace = exports.getNodeId = exports.isEqual = exports.DummyComponent = undefined;
 
-var _dummycomponent = __webpack_require__(7);
+var _dummyComponent = __webpack_require__(7);
 
-var _dummycomponent2 = _interopRequireDefault(_dummycomponent);
+var _dummyComponent2 = _interopRequireDefault(_dummyComponent);
 
 var _utils = __webpack_require__(8);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.DummyComponent = _dummycomponent2.default;
+exports.DummyComponent = _dummyComponent2.default;
 exports.isEqual = _utils.isEqual;
 exports.getNodeId = _utils.getNodeId;
 exports.yExtraSpace = _utils.yExtraSpace;
@@ -114,13 +114,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _Layout = __webpack_require__(3);
+var _layoutModel = __webpack_require__(3);
 
-var _Layout2 = _interopRequireDefault(_Layout);
+var _layoutModel2 = _interopRequireDefault(_layoutModel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _Layout2.default;
+exports.default = _layoutModel2.default;
 
 /***/ }),
 /* 2 */
@@ -132,17 +132,17 @@ exports.default = _Layout2.default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.DummyComponent = exports.Layout = undefined;
+exports.DummyComponent = exports.LayoutModel = undefined;
 
-var _layout = __webpack_require__(1);
+var _layoutModel = __webpack_require__(1);
 
-var _layout2 = _interopRequireDefault(_layout);
+var _layoutModel2 = _interopRequireDefault(_layoutModel);
 
 var _utils = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.Layout = _layout2.default;
+exports.LayoutModel = _layoutModel2.default;
 exports.DummyComponent = _utils.DummyComponent;
 
 /***/ }),
@@ -168,9 +168,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Layout = function () {
-    function Layout(measurements, config) {
-        _classCallCheck(this, Layout);
+var LayoutModel = function () {
+    function LayoutModel(measurements, config) {
+        _classCallCheck(this, LayoutModel);
 
         this.measurements = measurements;
         this.config = config;
@@ -178,7 +178,7 @@ var Layout = function () {
         this.setBoundBox();
     }
 
-    _createClass(Layout, [{
+    _createClass(LayoutModel, [{
         key: 'createTree',
         value: function createTree(config, parent) {
             var node = new _tree2.default(config);
@@ -318,7 +318,7 @@ var Layout = function () {
             var _this3 = this;
 
             node.children.forEach(function (child) {
-                Layout.setHostSpatialConfig(child);
+                LayoutModel.setHostSpatialConfig(child);
                 _this3.setHostPosition(child);
             });
         }
@@ -345,10 +345,10 @@ var Layout = function () {
         }
     }]);
 
-    return Layout;
+    return LayoutModel;
 }();
 
-exports.default = Layout;
+exports.default = LayoutModel;
 
 /***/ }),
 /* 4 */
@@ -501,13 +501,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _DummyComponent = __webpack_require__(6);
+var _dummyComponent = __webpack_require__(6);
 
-var _DummyComponent2 = _interopRequireDefault(_DummyComponent);
+var _dummyComponent2 = _interopRequireDefault(_dummyComponent);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _DummyComponent2.default;
+exports.default = _dummyComponent2.default;
 
 /***/ }),
 /* 8 */
@@ -537,8 +537,7 @@ function isEqual(value, compareTo) {
 var getNodeId = function () {
     var _uid = 0;
     return function () {
-        ++_uid;
-        return 'node-' + _uid;
+        return 'node-' + ++_uid;
     };
 }();
 

@@ -1,4 +1,4 @@
-import Layout from './layout';
+import LayoutModel from './layout-model';
 import { DummyComponent } from './utils';
 
-export { Layout, DummyComponent };
+export { LayoutModel, DummyComponent };
