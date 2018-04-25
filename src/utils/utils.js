@@ -13,13 +13,10 @@ function isEqual(value, compareTo) {
     return value.toLowerCase() === compareTo.toLowerCase();
 }
 
-const getNodeId = (function () {
+const getNodeId = (() => {
     let _uid = 0;
-    return function () {
-        ++_uid;
-        return `node-${_uid}`;
-    };
-}());
+    return () => `node-${++_uid}`;
+})();
 
 function yExtraSpace(node) {
     let smallestHeight = 0;
