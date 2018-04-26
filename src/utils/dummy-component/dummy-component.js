@@ -4,6 +4,7 @@ class DummyComponent {
         this.seed = seed;
         this.dimensions = dimensions;
         this.position = null;
+        this.renderAt = null;
     }
 
     getLogicalSpace() {
@@ -13,9 +14,10 @@ class DummyComponent {
         };
     }
 
-    setSpatialConfig(x, y, width, height) {
-        this.position = { top: y, left: x };
-        this.dimensions = { width, height };
+    setSpatialConfig(conf) {
+        this.position = { top: conf.y, left: conf.x };
+        this.dimensions = { width: conf.width, height: conf.height };
+        this.renderAt = conf.renderAt;
     }
 }
 

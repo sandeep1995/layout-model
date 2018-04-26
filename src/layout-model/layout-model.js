@@ -123,15 +123,27 @@ class LayoutModel {
     }
 
     static setHostSpatialConfig(node) {
-        let boundBox = node.boundBox;
+        let bb = node.boundBox;
         if (node.model.host && node.model.host.setSpatialConfig) {
-            node.model.host.setSpatialConfig(boundBox.left, boundBox.top, boundBox.width, boundBox.height);
+            let conf = {
+                x: bb.left,
+                y: bb.top,
+                width: bb.width,
+                height: bb.height,
+                renderAt: node._id
+            };
+
+            node.model.host.setSpatialConfig(conf);
         }
     }
 
     negotiate() {
         this.negotiateDimension(this.root);
         this.computePosition(this.root);
+        return this;
+    }
+
+    broadcast() {
         this.setHostPosition(this.root);
         return this;
     }
