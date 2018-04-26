@@ -327,6 +327,11 @@ var LayoutModel = function () {
         value: function negotiate() {
             this.negotiateDimension(this.root);
             this.computePosition(this.root);
+            return this;
+        }
+    }, {
+        key: 'broadcast',
+        value: function broadcast() {
             this.setHostPosition(this.root);
             return this;
         }
@@ -338,9 +343,17 @@ var LayoutModel = function () {
     }], [{
         key: 'setHostSpatialConfig',
         value: function setHostSpatialConfig(node) {
-            var boundBox = node.boundBox;
+            var bb = node.boundBox;
             if (node.model.host && node.model.host.setSpatialConfig) {
-                node.model.host.setSpatialConfig(boundBox.left, boundBox.top, boundBox.width, boundBox.height);
+                var conf = {
+                    x: bb.left,
+                    y: bb.top,
+                    width: bb.width,
+                    height: bb.height,
+                    renderAt: node._id
+                };
+
+                node.model.host.setSpatialConfig(conf);
             }
         }
     }]);
@@ -460,6 +473,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /* eslint-disable require-jsdoc */
+/* eslint no-undef: "off" */
 var DummyComponent = function () {
     function DummyComponent(seed, dimensions) {
         _classCallCheck(this, DummyComponent);
@@ -467,10 +481,11 @@ var DummyComponent = function () {
         this.seed = seed;
         this.dimensions = dimensions;
         this.position = null;
+        this.renderAt = null;
     }
 
     _createClass(DummyComponent, [{
-        key: "getLogicalSpace",
+        key: 'getLogicalSpace',
         value: function getLogicalSpace() {
             return {
                 width: this.dimensions.width - 1 * this.seed,
@@ -478,10 +493,19 @@ var DummyComponent = function () {
             };
         }
     }, {
-        key: "setSpatialConfig",
-        value: function setSpatialConfig(x, y, width, height) {
-            this.position = { top: y, left: x };
-            this.dimensions = { width: width, height: height };
+        key: 'setSpatialConfig',
+        value: function setSpatialConfig(conf) {
+            this.position = { top: conf.y, left: conf.x };
+            this.dimensions = { width: conf.width, height: conf.height };
+            this.renderAt = conf.renderAt;
+        }
+    }, {
+        key: 'draw',
+        value: function draw() {
+            var doc = document.getElementById(this.renderAt),
+                div = document.createElement('div');
+            div.style.backgroundColor = '#36C3FF';
+            doc.appendChild(div);
         }
     }]);
 
