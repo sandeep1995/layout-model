@@ -4,7 +4,8 @@ import {
   getNodeId,
   yExtraSpace,
   xExtraSpace,
-  determineBoundBox
+  determineBoundBox,
+  getColor
 } from './utils';
 
 export {
@@ -13,5 +14,6 @@ export {
   getNodeId,
   yExtraSpace,
   xExtraSpace,
-  determineBoundBox
+  determineBoundBox,
+  getColor
 };

@@ -1,5 +1,8 @@
 /* eslint-disable require-jsdoc */
+
 /* eslint no-undef: "off" */
+import { getColor } from '../';
+
 class DummyComponent {
     constructor(seed, dimensions) {
         this.seed = seed;
@@ -16,17 +19,28 @@ class DummyComponent {
     }
 
     setSpatialConfig(conf) {
-        this.position = { top: conf.y, left: conf.x };
-        this.dimensions = { width: conf.width, height: conf.height };
+        this.position = {
+            top: conf.y,
+            left: conf.x
+        };
+        this.newDimensions = {
+            width: conf.width,
+            height: conf.height
+        };
         this.renderAt = conf.renderAt;
     }
 
-    draw () {
+    draw() {
         let doc = document.getElementById(this.renderAt),
-            div = document.createElement('div');
-        div.style.backgroundColor = '#36C3FF';
-        div.style.width = `${this.dimensions.width - (this.seed * 2)}px`;
-        div.style.height = `${this.dimensions.height - (this.seed * 2)}px`;
+            div = document.createElement('div'),
+            width = Math.max(this.dimensions.width, this.newDimensions.width),
+            height = Math.max(this.dimensions.height, this.newDimensions.height);
+
+        div.style.backgroundColor = getColor();
+
+        div.style.width = `${width - (this.seed * 2)}px`;
+        div.style.height = `${height - (this.seed * 2)}px`;
+
         doc.appendChild(div);
     }
 }

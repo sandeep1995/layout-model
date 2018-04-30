@@ -86,7 +86,7 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.determineBoundBox = exports.xExtraSpace = exports.yExtraSpace = exports.getNodeId = exports.isEqual = exports.DummyComponent = undefined;
+exports.getColor = exports.determineBoundBox = exports.xExtraSpace = exports.yExtraSpace = exports.getNodeId = exports.isEqual = exports.DummyComponent = undefined;
 
 var _dummyComponent = __webpack_require__(7);
 
@@ -102,6 +102,7 @@ exports.getNodeId = _utils.getNodeId;
 exports.yExtraSpace = _utils.yExtraSpace;
 exports.xExtraSpace = _utils.xExtraSpace;
 exports.determineBoundBox = _utils.determineBoundBox;
+exports.getColor = _utils.getColor;
 
 /***/ }),
 /* 1 */
@@ -468,12 +469,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* eslint-disable require-jsdoc */
+
+/* eslint no-undef: "off" */
+
+
+var _ = __webpack_require__(0);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/* eslint-disable require-jsdoc */
-/* eslint no-undef: "off" */
 var DummyComponent = function () {
     function DummyComponent(seed, dimensions) {
         _classCallCheck(this, DummyComponent);
@@ -495,18 +499,29 @@ var DummyComponent = function () {
     }, {
         key: 'setSpatialConfig',
         value: function setSpatialConfig(conf) {
-            this.position = { top: conf.y, left: conf.x };
-            this.dimensions = { width: conf.width, height: conf.height };
+            this.position = {
+                top: conf.y,
+                left: conf.x
+            };
+            this.newDimensions = {
+                width: conf.width,
+                height: conf.height
+            };
             this.renderAt = conf.renderAt;
         }
     }, {
         key: 'draw',
         value: function draw() {
             var doc = document.getElementById(this.renderAt),
-                div = document.createElement('div');
-            div.style.backgroundColor = '#36C3FF';
-            div.style.width = this.dimensions.width - this.seed * 2 + 'px';
-            div.style.height = this.dimensions.height - this.seed * 2 + 'px';
+                div = document.createElement('div'),
+                width = Math.max(this.dimensions.width, this.newDimensions.width),
+                height = Math.max(this.dimensions.height, this.newDimensions.height);
+
+            div.style.backgroundColor = (0, _.getColor)();
+
+            div.style.width = width - this.seed * 2 + 'px';
+            div.style.height = height - this.seed * 2 + 'px';
+
             doc.appendChild(div);
         }
     }]);
@@ -543,7 +558,7 @@ exports.default = _dummyComponent2.default;
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 /**
  * Compares two strings in lowercase
@@ -554,106 +569,115 @@ Object.defineProperty(exports, "__esModule", {
  * @return {boolean} true if values are equal
  */
 function isEqual(value, compareTo) {
-    if (typeof value !== 'string' || typeof compareTo !== 'string') {
-        throw new TypeError('value and compareTo must be string');
-    }
-    return value.toLowerCase() === compareTo.toLowerCase();
+  if (typeof value !== 'string' || typeof compareTo !== 'string') {
+    throw new TypeError('value and compareTo must be string');
+  }
+  return value.toLowerCase() === compareTo.toLowerCase();
 }
 
 var getNodeId = function () {
-    var _uid = 0;
-    return function () {
-        return 'node-' + ++_uid;
-    };
+  var _uid = 0;
+  return function () {
+    return 'node-' + ++_uid;
+  };
 }();
 
 function yExtraSpace(node) {
-    var smallestHeight = 0;
-    if (node.getCutType() === 'v') {
-        smallestHeight = smallestExtraHeightHorizontally(node);
-    } else if (node.getCutType() === 'h') {
-        node.children.forEach(function (child) {
-            smallestHeight += yExtraSpace(child);
-        });
-    } else if (node.model.host && node.model.host.getLogicalSpace) {
-        var containerHeight = node.boundBox.height,
-            hostHeight = node.model.host.getLogicalSpace().height;
+  var smallestHeight = 0;
+  if (node.getCutType() === 'v') {
+    smallestHeight = smallestExtraHeightHorizontally(node);
+  } else if (node.getCutType() === 'h') {
+    node.children.forEach(function (child) {
+      smallestHeight += yExtraSpace(child);
+    });
+  } else if (node.model.host && node.model.host.getLogicalSpace) {
+    var containerHeight = node.boundBox.height,
+        hostHeight = node.model.host.getLogicalSpace().height;
 
-        smallestHeight = containerHeight - hostHeight;
-        if (smallestHeight < 0) {
-            smallestHeight = 0;
-        }
-    } else {
-        smallestHeight = 0;
+    smallestHeight = containerHeight - hostHeight;
+    if (smallestHeight < 0) {
+      smallestHeight = 0;
     }
-    return smallestHeight;
+  } else {
+    smallestHeight = 0;
+  }
+  return smallestHeight;
 }
 
 function smallestExtraHeightHorizontally(node) {
-    var smallestHeight = Number.MAX_SAFE_INTEGER;
-    node.children.forEach(function (child) {
-        var h = yExtraSpace(child);
-        if (h < smallestHeight) {
-            smallestHeight = h;
-        }
-    });
-    return smallestHeight;
+  var smallestHeight = Number.MAX_SAFE_INTEGER;
+  node.children.forEach(function (child) {
+    var h = yExtraSpace(child);
+    if (h < smallestHeight) {
+      smallestHeight = h;
+    }
+  });
+  return smallestHeight;
 }
 
 function xExtraSpace(node) {
-    var smallestWidth = 0;
-    if (node.getCutType() === 'h') {
-        smallestWidth = smallestExtraWidthVertically(node);
-    } else if (node.getCutType() === 'v') {
-        node.children.forEach(function (child) {
-            smallestWidth += xExtraSpace(child);
-        });
-    } else if (node.model.host && node.model.host.getLogicalSpace) {
-        var containerWidth = node.boundBox.width,
-            hostWidth = node.model.host.getLogicalSpace().width;
-        smallestWidth = containerWidth - hostWidth;
-        if (smallestWidth < 0) {
-            smallestWidth = 0;
-        }
-    } else {
-        smallestWidth = 0;
+  var smallestWidth = 0;
+  if (node.getCutType() === 'h') {
+    smallestWidth = smallestExtraWidthVertically(node);
+  } else if (node.getCutType() === 'v') {
+    node.children.forEach(function (child) {
+      smallestWidth += xExtraSpace(child);
+    });
+  } else if (node.model.host && node.model.host.getLogicalSpace) {
+    var containerWidth = node.boundBox.width,
+        hostWidth = node.model.host.getLogicalSpace().width;
+    smallestWidth = containerWidth - hostWidth;
+    if (smallestWidth < 0) {
+      smallestWidth = 0;
     }
-    return smallestWidth;
+  } else {
+    smallestWidth = 0;
+  }
+  return smallestWidth;
 }
 
 function smallestExtraWidthVertically(node) {
-    var smallestWidth = Number.MAX_SAFE_INTEGER;
-    node.children.forEach(function (child) {
-        var w = xExtraSpace(child);
-        if (w < smallestWidth) {
-            smallestWidth = w;
-        }
-    });
-    return smallestWidth;
+  var smallestWidth = Number.MAX_SAFE_INTEGER;
+  node.children.forEach(function (child) {
+    var w = xExtraSpace(child);
+    if (w < smallestWidth) {
+      smallestWidth = w;
+    }
+  });
+  return smallestWidth;
 }
 
 function determineBoundBox(bb, i, arr, instance) {
-    if (i) {
-        // if not first sibling, take boundbox from previous sibling
-        var lastSibling = arr[i - 1];
-        return {
-            width: bb.width,
-            height: bb.height,
-
-            top: instance._parentCut === 'h' ? lastSibling.boundBox.top + lastSibling.boundBox.height : lastSibling.boundBox.top,
-
-            left: instance._parentCut === 'h' ? lastSibling.boundBox.left : lastSibling.boundBox.left + lastSibling.boundBox.width
-        };
-    }
-    // if first sibling, take boundbox from parent
+  if (i) {
+    // if not first sibling, take boundbox from previous sibling
+    var lastSibling = arr[i - 1];
     return {
-        width: bb.width,
-        height: bb.height,
-        top: instance.parent.boundBox.top,
-        left: instance.parent.boundBox.left
+      width: bb.width,
+      height: bb.height,
+
+      top: instance._parentCut === 'h' ? lastSibling.boundBox.top + lastSibling.boundBox.height : lastSibling.boundBox.top,
+
+      left: instance._parentCut === 'h' ? lastSibling.boundBox.left : lastSibling.boundBox.left + lastSibling.boundBox.width
     };
+  }
+  // if first sibling, take boundbox from parent
+  return {
+    width: bb.width,
+    height: bb.height,
+    top: instance.parent.boundBox.top,
+    left: instance.parent.boundBox.left
+  };
 }
 
+function getColor() {
+  var colors = ['#b71540', '#0c2461', '#079992', '#e55039', '#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e', '#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2c3e50', '#f1c40f', '#e67e22', '#e74c3c', '#ecf0f1', '#95a5a6', '#f39c12', '#d35400', '#c0392b', '#bdc3c7', '#7f8c8d'];
+  var min = 0,
+      max = colors.length - 1,
+      index = Math.floor(min + Math.random() * (max + 1 - min));
+  return colors[index];
+}
+
+exports.getColor = getColor;
 exports.isEqual = isEqual;
 exports.getNodeId = getNodeId;
 exports.yExtraSpace = yExtraSpace;
