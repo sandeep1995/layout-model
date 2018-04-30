@@ -36,7 +36,7 @@ class DummyComponent {
             width = Math.max(this.dimensions.width, this.newDimensions.width),
             height = Math.max(this.dimensions.height, this.newDimensions.height);
 
-        div.style.backgroundColor = getColor();
+        div.style.backgroundColor = '#fab1a0'; // getColor();
 
         div.style.width = `${width - (this.seed * 2)}px`;
         div.style.height = `${height - (this.seed * 2)}px`;
