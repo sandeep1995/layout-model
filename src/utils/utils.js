@@ -8,8 +8,8 @@
  */
 function isEqual(value, compareTo) {
     if (typeof value !== 'string' || typeof compareTo !== 'string') {
-      throw new TypeError('value and compareTo must be string');
-  }
+        throw new TypeError('value and compareTo must be string');
+    }
     return value.toLowerCase() === compareTo.toLowerCase();
 }
 
@@ -21,122 +21,122 @@ const getNodeId = (() => {
 function yExtraSpace(node) {
     let smallestHeight = 0;
     if (node.getCutType() === 'v') {
-      smallestHeight = smallestExtraHeightHorizontally(node);
-  } else if (node.getCutType() === 'h') {
-      node.children.forEach((child) => {
-        smallestHeight += yExtraSpace(child);
-    });
-  } else if (node.model.host && node.model.host.getLogicalSpace) {
-      let containerHeight = node.boundBox.height,
-        hostHeight = node.model.host.getLogicalSpace().height;
+        smallestHeight = smallestExtraHeightHorizontally(node);
+    } else if (node.getCutType() === 'h') {
+        node.children.forEach((child) => {
+            smallestHeight += yExtraSpace(child);
+        });
+    } else if (node.model.host && node.model.host.getLogicalSpace) {
+        let containerHeight = node.boundBox.height,
+            hostHeight = node.model.host.getLogicalSpace().height;
 
-      smallestHeight = containerHeight - hostHeight;
-      if (smallestHeight < 0) {
+        smallestHeight = containerHeight - hostHeight;
+        if (smallestHeight < 0) {
+            smallestHeight = 0;
+        }
+    } else {
         smallestHeight = 0;
     }
-  } else {
-      smallestHeight = 0;
-  }
     return smallestHeight;
 }
 
 function smallestExtraHeightHorizontally(node) {
     let smallestHeight = Number.MAX_SAFE_INTEGER;
     node.children.forEach((child) => {
-      let h = yExtraSpace(child);
-      if (h < smallestHeight) {
-        smallestHeight = h;
-    }
-  });
+        let h = yExtraSpace(child);
+        if (h < smallestHeight) {
+            smallestHeight = h;
+        }
+    });
     return smallestHeight;
 }
 
 function xExtraSpace(node) {
     let smallestWidth = 0;
     if (node.getCutType() === 'h') {
-      smallestWidth = smallestExtraWidthVertically(node);
-  } else if (node.getCutType() === 'v') {
-      node.children.forEach((child) => {
-        smallestWidth += xExtraSpace(child);
-    });
-  } else if (node.model.host && node.model.host.getLogicalSpace) {
-      let containerWidth = node.boundBox.width,
-        hostWidth = node.model.host.getLogicalSpace().width;
-      smallestWidth = containerWidth - hostWidth;
-      if (smallestWidth < 0) {
+        smallestWidth = smallestExtraWidthVertically(node);
+    } else if (node.getCutType() === 'v') {
+        node.children.forEach((child) => {
+            smallestWidth += xExtraSpace(child);
+        });
+    } else if (node.model.host && node.model.host.getLogicalSpace) {
+        let containerWidth = node.boundBox.width,
+            hostWidth = node.model.host.getLogicalSpace().width;
+        smallestWidth = containerWidth - hostWidth;
+        if (smallestWidth < 0) {
+            smallestWidth = 0;
+        }
+    } else {
         smallestWidth = 0;
     }
-  } else {
-      smallestWidth = 0;
-  }
     return smallestWidth;
 }
 
 function smallestExtraWidthVertically(node) {
     let smallestWidth = Number.MAX_SAFE_INTEGER;
     node.children.forEach((child) => {
-      let w = xExtraSpace(child);
-      if (w < smallestWidth) {
-        smallestWidth = w;
-    }
-  });
+        let w = xExtraSpace(child);
+        if (w < smallestWidth) {
+            smallestWidth = w;
+        }
+    });
     return smallestWidth;
 }
 
 function determineBoundBox(bb, i, arr, instance) {
     if (i) {
     // if not first sibling, take boundbox from previous sibling
-      let lastSibling = arr[i - 1];
-      return {
-        width: bb.width,
-        height: bb.height,
+        let lastSibling = arr[i - 1];
+        return {
+            width: bb.width,
+            height: bb.height,
 
-        top: instance._parentCut === 'h' ?
+            top: instance._parentCut === 'h' ?
         lastSibling.boundBox.top + lastSibling.boundBox.height : lastSibling.boundBox.top,
 
-        left: instance._parentCut === 'h' ?
+            left: instance._parentCut === 'h' ?
         lastSibling.boundBox.left : lastSibling.boundBox.left + lastSibling.boundBox.width
-    };
-  }
+        };
+    }
   // if first sibling, take boundbox from parent
     return {
-      width: bb.width,
-      height: bb.height,
-      top: instance.parent.boundBox.top,
-      left: instance.parent.boundBox.left
-  };
+        width: bb.width,
+        height: bb.height,
+        top: instance.parent.boundBox.top,
+        left: instance.parent.boundBox.left
+    };
 }
 
 function getColor() {
     const colors = [
-      '#b71540',
-      '#0c2461',
-      '#079992',
-      '#e55039',
-      '#1abc9c',
-      '#2ecc71',
-      '#3498db',
-      '#9b59b6',
-      '#34495e',
-      '#16a085',
-      '#27ae60',
-      '#2980b9',
-      '#8e44ad',
-      '#2c3e50',
-      '#f1c40f',
-      '#e67e22',
-      '#e74c3c',
-      '#ecf0f1',
-      '#95a5a6',
-      '#f39c12',
-      '#d35400',
-      '#c0392b',
-      '#bdc3c7',
-      '#7f8c8d'
-  ];
+        '#b71540',
+        '#0c2461',
+        '#079992',
+        '#e55039',
+        '#1abc9c',
+        '#2ecc71',
+        '#3498db',
+        '#9b59b6',
+        '#34495e',
+        '#16a085',
+        '#27ae60',
+        '#2980b9',
+        '#8e44ad',
+        '#2c3e50',
+        '#f1c40f',
+        '#e67e22',
+        '#e74c3c',
+        '#ecf0f1',
+        '#95a5a6',
+        '#f39c12',
+        '#d35400',
+        '#c0392b',
+        '#bdc3c7',
+        '#7f8c8d'
+    ];
     let min = 0,
-      max = colors.length - 1,
-      index = Math.floor(min + Math.random() * (max + 1 - min));
+        max = colors.length - 1,
+        index = Math.floor(min + Math.random() * (max + 1 - min));
     return colors[index];
 }
 
