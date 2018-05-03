@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { isEqual } from './utils';
+import { isEqual, getNodeId } from './utils';
 
 describe('Utils', () => {
     describe('#isEqualStringValue', () => {
@@ -17,6 +17,12 @@ describe('Utils', () => {
             expect(() => { isEqual({}, VERTICAL); })
                             .to
                             .throw(TypeError, 'value and compareTo must be string');
+        });
+    });
+
+    describe('#getNodeId', () => {
+        it('should create a unique node id', () => {
+            expect(getNodeId()).to.be.not.equal(getNodeId());
         });
     });
 });
