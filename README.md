@@ -23,6 +23,35 @@ Commonjs
 const { LayoutModel } = require('layout-model');
 ```
 
+## Prerequisites
+
+LayoutModel talks to Participant Component via method invoking. Each participant component must implement following two methods.
+
+1. `getLogicalSpace()` -> Tells the minimum dimension required by that component.
+
+An example returned object from `getLogicalSpace()` should be like the following
+
+```
+{
+  width: <Number>,
+  height: <Number>
+}
+```
+
+1. `setSpatialConfig(conf)` -> LayoutModel communicate back with the allocated position and dimension.
+
+Description of `conf`
+
+```
+{
+  x: <Number>,
+  y: <Number>,
+  width: <Number>,
+  height: <Number>,
+  renderAt: <DOM_ID>
+}
+```
+
 ## Usage
 
 Let's create a very familier two column layout with equal width distribution. But we also want the right column to be `preferred`. That means any waste space by the left column will be redistributed to the right column.
