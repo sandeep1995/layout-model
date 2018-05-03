@@ -1,7 +1,6 @@
 /* eslint-disable require-jsdoc */
 
 /* eslint no-undef: "off" */
-import { getColor } from '../';
 
 class DummyComponent {
     constructor(seed, dimensions) {
@@ -29,6 +28,8 @@ class DummyComponent {
         };
         this.renderAt = conf.renderAt;
     }
+
+    /* istanbul ignore next */
 
     draw() {
         let doc = document.getElementById(this.renderAt),
