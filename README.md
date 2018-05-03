@@ -1,7 +1,8 @@
 # Layout Model
-The *brain* of [Layout](https://github.com/ud-ud/layout)
 
 `layout-model` helps creating layouts which ensures proper utilization of left over space of participant components of the layout.
+
+> The *brain* of [Layout](https://github.com/ud-ud/layout)
 
 ## Installation
 
