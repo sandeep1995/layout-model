@@ -37,7 +37,10 @@ class Node {
         return !!this.model.preferred;
     }
 
-    // method to update the Node Information
+    /**
+     * function to search a node and update it with the config provided.
+     * @param  {} nodeconfig
+     */
     updateNode(nodeconfig) {
         if (this._id === nodeconfig._id)
         {
@@ -58,7 +61,7 @@ class Node {
         }
     }
 
-    // function to search a node
+    // Recursive function to search a node
     searchNode(node, nodeconfig) {
         node.children.forEach((node1) => {
             if (node1._id === nodeconfig._id)
