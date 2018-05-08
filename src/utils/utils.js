@@ -1,3 +1,4 @@
+
 /**
  * Compares two strings in lowercase
  *
@@ -21,7 +22,7 @@ const getNodeId = (() => {
 function yExtraSpace(node) {
     let smallestHeight = 0;
     if (node.getCutType() === 'v') {
-        smallestHeight = smallestExtraHeightHorizontally(node);
+        smallestHeight = smallestExtraHeightHorizontally(node); // eslint-disable-line no-use-before-define
     } else if (node.getCutType() === 'h') {
         node.children.forEach((child) => {
             smallestHeight += yExtraSpace(child);
@@ -54,7 +55,7 @@ function smallestExtraHeightHorizontally(node) {
 function xExtraSpace(node) {
     let smallestWidth = 0;
     if (node.getCutType() === 'h') {
-        smallestWidth = smallestExtraWidthVertically(node);
+        smallestWidth = smallestExtraWidthVertically(node); // eslint-disable-line no-use-before-define
     } else if (node.getCutType() === 'v') {
         node.children.forEach((child) => {
             smallestWidth += xExtraSpace(child);
@@ -107,45 +108,12 @@ function determineBoundBox(bb, i, arr, instance) {
     };
 }
 
-function getColor() {
-    const colors = [
-        '#b71540',
-        '#0c2461',
-        '#079992',
-        '#e55039',
-        '#1abc9c',
-        '#2ecc71',
-        '#3498db',
-        '#9b59b6',
-        '#34495e',
-        '#16a085',
-        '#27ae60',
-        '#2980b9',
-        '#8e44ad',
-        '#2c3e50',
-        '#f1c40f',
-        '#e67e22',
-        '#e74c3c',
-        '#ecf0f1',
-        '#95a5a6',
-        '#f39c12',
-        '#d35400',
-        '#c0392b',
-        '#bdc3c7',
-        '#7f8c8d'
-    ];
-    let min = 0,
-        max = colors.length - 1,
-        index = Math.floor(min + Math.random() * (max + 1 - min));
-    return colors[index];
-}
-
-
 export {
-  getColor,
   isEqual,
   getNodeId,
   yExtraSpace,
   xExtraSpace,
-  determineBoundBox
+  determineBoundBox,
+  smallestExtraWidthVertically,
+  smallestExtraHeightHorizontally
 };
