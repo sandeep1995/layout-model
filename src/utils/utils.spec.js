@@ -1,3 +1,4 @@
+
 import {
   expect
 } from 'chai';
@@ -254,9 +255,7 @@ describe('Utils', () => {
                 height: 100
             });
 
-            const outBb1 = determineBoundBox(bb, j, arr, instance);
-
-            expect(outBb1).to.be.deep.equal({
+            expect(determineBoundBox(bb, j, arr, instance)).to.be.deep.equal({
                 top: 100,
                 left: 0,
                 width: 100,
@@ -306,9 +305,8 @@ describe('Utils', () => {
                 height: 100
             });
 
-            const outBb1 = determineBoundBox(bb, j, arr, instance);
 
-            expect(outBb1).to.be.deep.equal({
+            expect(determineBoundBox(bb, j, arr, instance)).to.be.deep.equal({
                 top: 0,
                 left: 100,
                 width: 100,

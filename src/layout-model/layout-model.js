@@ -89,7 +89,7 @@ class LayoutModel {
           // push extra space in sink. Execute it when all non preferred space are computed.
                 preferred = child;
 
-                continue;
+                continue; // eslint-disable-line no-continue
             }
         // reduce own height and save it in a var
             cumultiveExtraSpaceAmt += (extraSpaceAmt = fn(child));

@@ -1,3 +1,4 @@
+
 /**
  * Compares two strings in lowercase
  *
@@ -21,7 +22,7 @@ const getNodeId = (() => {
 function yExtraSpace(node) {
     let smallestHeight = 0;
     if (node.getCutType() === 'v') {
-        smallestHeight = smallestExtraHeightHorizontally(node);
+        smallestHeight = smallestExtraHeightHorizontally(node); // eslint-disable-line no-use-before-define
     } else if (node.getCutType() === 'h') {
         node.children.forEach((child) => {
             smallestHeight += yExtraSpace(child);
@@ -54,7 +55,7 @@ function smallestExtraHeightHorizontally(node) {
 function xExtraSpace(node) {
     let smallestWidth = 0;
     if (node.getCutType() === 'h') {
-        smallestWidth = smallestExtraWidthVertically(node);
+        smallestWidth = smallestExtraWidthVertically(node); // eslint-disable-line no-use-before-define
     } else if (node.getCutType() === 'v') {
         node.children.forEach((child) => {
             smallestWidth += xExtraSpace(child);
