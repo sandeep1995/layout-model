@@ -1,3 +1,4 @@
+
 import {
   expect
 } from 'chai';
@@ -5,10 +6,12 @@ import {
   isEqual,
   getNodeId,
   yExtraSpace,
-  xExtraSpace
+  xExtraSpace,
+  smallestExtraWidthVertically,
+  smallestExtraHeightHorizontally,
+  determineBoundBox
 } from './utils';
 
-import Node from '../tree/';
 import DummyComponent from '../utils/dummy-component';
 import LayoutModel from '../layout-model';
 
@@ -40,7 +43,7 @@ describe('Utils', () => {
     });
 
     describe('#yExtraSpace', () => {
-        it('should return the correct vertical extra spcae', () => {
+        it('should return the correct vertical extra space for horizontal cut', () => {
             const width = 100,
                 height = 100;
             let comp1 = new DummyComponent(10, {
@@ -79,10 +82,88 @@ describe('Utils', () => {
 
             expect(yExtraSpace(root)).to.be.equal(40);
         });
+        it('should return the correct vertical extra space for vertical cut', () => {
+            const width = 100,
+                height = 100;
+            let comp1 = new DummyComponent(10, {
+                    width: width / 2,
+                    height
+                }),
+                comp2 = new DummyComponent(10, {
+                    width: width / 2,
+                    height
+                }),
+                layoutDef = {
+                    host: null,
+                    ratioWeight: 1,
+                    cut: 'v',
+                    lanes: [{
+                        host: comp1,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    },
+                    {
+                        host: comp2,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    }
+                    ]
+                },
+
+                layout = new LayoutModel({
+                    width,
+                    height
+                }, layoutDef),
+
+                root = layout.tree();
+
+            expect(yExtraSpace(root)).to.be.equal(20);
+        });
+        it('should return the correct extra space larger component', () => {
+            const width = 100,
+                height = 100;
+            let comp1 = new DummyComponent(10, {
+                    width: width + 10,
+                    height: height + 10
+                }),
+                comp2 = new DummyComponent(10, {
+                    width: width + 10,
+                    height: height + 10
+                }),
+                layoutDef = {
+                    host: null,
+                    ratioWeight: 1,
+                    cut: 'v',
+                    lanes: [{
+                        host: comp1,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    },
+                    {
+                        host: comp2,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    }
+                    ]
+                },
+
+                layout = new LayoutModel({
+                    width,
+                    height
+                }, layoutDef),
+
+                root = layout.tree();
+
+            expect(yExtraSpace(root)).to.be.equal(10);
+        });
     });
 
     describe('#xExtraSpace', () => {
-        it('should return the correct horizontal extra spcae', () => {
+        it('should return the correct horizontal extra space for vertical cut', () => {
             const width = 100,
                 height = 100;
             let comp1 = new DummyComponent(10, {
@@ -120,6 +201,273 @@ describe('Utils', () => {
                 root = layout.tree();
 
             expect(xExtraSpace(root)).to.be.equal(40);
+        });
+        it('should return the correct vertical extra space for horizontal cut', () => {
+            const width = 100,
+                height = 100;
+            let comp1 = new DummyComponent(10, {
+                    width: width / 2,
+                    height
+                }),
+                comp2 = new DummyComponent(10, {
+                    width: width / 2,
+                    height
+                }),
+                layoutDef = {
+                    host: null,
+                    ratioWeight: 1,
+                    cut: 'h',
+                    lanes: [{
+                        host: comp1,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    },
+                    {
+                        host: comp2,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    }
+                    ]
+                },
+
+                layout = new LayoutModel({
+                    width,
+                    height
+                }, layoutDef),
+
+                root = layout.tree();
+
+            expect(xExtraSpace(root)).to.be.equal(70);
+        });
+        it('should return the correct extra space larger component', () => {
+            const width = 100,
+                height = 100;
+            let comp1 = new DummyComponent(10, {
+                    width: width + 10,
+                    height
+                }),
+                comp2 = new DummyComponent(10, {
+                    width: width + 10,
+                    height
+                }),
+                layoutDef = {
+                    host: null,
+                    ratioWeight: 1,
+                    cut: 'h',
+                    lanes: [{
+                        host: comp1,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    },
+                    {
+                        host: comp2,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    }
+                    ]
+                },
+
+                layout = new LayoutModel({
+                    width,
+                    height
+                }, layoutDef),
+
+                root = layout.tree();
+
+            expect(xExtraSpace(root)).to.be.equal(10);
+        });
+    });
+
+    describe('#smallestExtraWidthVertically', () => {
+        it('should return the correct smallestExtraWidthVertically extra space', () => {
+            const width = 100,
+                height = 100;
+            let comp1 = new DummyComponent(10, {
+                    width: width / 2,
+                    height
+                }),
+                comp2 = new DummyComponent(10, {
+                    width: width / 2,
+                    height
+                }),
+                layoutDef = {
+                    host: null,
+                    ratioWeight: 1,
+                    cut: 'v',
+                    lanes: [{
+                        host: comp1,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    },
+                    {
+                        host: comp2,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    }
+                    ]
+                },
+
+                layout = new LayoutModel({
+                    width,
+                    height
+                }, layoutDef),
+
+                root = layout.tree(),
+                smWidth = smallestExtraWidthVertically(root);
+            expect(smWidth).to.be.equal(20);
+        });
+    });
+
+    describe('#smallestExtraHeightHorizontally', () => {
+        it('should return the correct smallestExtraHeightHorizontally extra space', () => {
+            const width = 100,
+                height = 100;
+            let comp1 = new DummyComponent(10, {
+                    width: width / 2,
+                    height
+                }),
+                comp2 = new DummyComponent(10, {
+                    width: width / 2,
+                    height
+                }),
+                layoutDef = {
+                    host: null,
+                    ratioWeight: 1,
+                    cut: 'v',
+                    lanes: [{
+                        host: comp1,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    },
+                    {
+                        host: comp2,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    }
+                    ]
+                },
+
+                layout = new LayoutModel({
+                    width,
+                    height
+                }, layoutDef),
+
+                root = layout.tree(),
+                smHeight = smallestExtraHeightHorizontally(root);
+
+            expect(smHeight).to.be.equal(20);
+        });
+    });
+
+    describe('#determineBoundBox', () => {
+        it('should return the correct bound box for horizontal', () => {
+            let bb = {
+                    top: 0,
+                    left: 0,
+                    width: 100,
+                    height: 100
+                },
+                i = 0,
+                j = 1,
+                arr = [
+                    {
+                        boundBox: {
+                            top: 0,
+                            left: 0,
+                            width: 100,
+                            height: 100
+                        }
+                    },
+                    {
+                        boundBox: {
+                            top: 100,
+                            left: 0,
+                            width: 100,
+                            height: 100
+                        }
+                    }
+                ],
+                instance = {
+                    parent: {
+                        boundBox: bb,
+                    }
+                };
+
+            instance._parentCut = 'h';
+            const outBb = determineBoundBox(bb, i, arr, instance);
+
+            expect(outBb).to.be.deep.equal({
+                top: 0,
+                left: 0,
+                width: 100,
+                height: 100
+            });
+
+            expect(determineBoundBox(bb, j, arr, instance)).to.be.deep.equal({
+                top: 100,
+                left: 0,
+                width: 100,
+                height: 100
+            });
+        });
+        it('should return the correct bound box for vertical', () => {
+            let bb = {
+                    top: 0,
+                    left: 0,
+                    width: 100,
+                    height: 100
+                },
+                i = 0,
+                j = 1,
+                arr = [
+                    {
+                        boundBox: {
+                            top: 0,
+                            left: 0,
+                            width: 100,
+                            height: 100
+                        }
+                    },
+                    {
+                        boundBox: {
+                            top: 100,
+                            left: 0,
+                            width: 100,
+                            height: 100
+                        }
+                    }
+                ],
+                instance = {
+                    parent: {
+                        boundBox: bb,
+                    }
+                };
+
+            instance._parentCut = 'v';
+            const outBb = determineBoundBox(bb, i, arr, instance);
+
+            expect(outBb).to.be.deep.equal({
+                top: 0,
+                left: 0,
+                width: 100,
+                height: 100
+            });
+
+
+            expect(determineBoundBox(bb, j, arr, instance)).to.be.deep.equal({
+                top: 0,
+                left: 100,
+                width: 100,
+                height: 100
+            });
         });
     });
 });

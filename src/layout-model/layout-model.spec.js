@@ -142,4 +142,236 @@ describe('Layout', () => {
             });
         });
     });
+
+    describe('#negotiate', () => {
+        const width = 600,
+            height = 600,
+            component1 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            component2 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            component3 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            component4 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            config = {
+                host: null,
+                cut: 'v',
+                ratioWeight: 1,
+                lanes: [{
+                    host: null,
+                    cut: 'h',
+                    ratioWeight: 1,
+                    preferred: true,
+                    lanes: [{
+                        host: component1,
+                        cut: null,
+                        ratioWeight: 1,
+                        preferred: true,
+                        lanes: []
+                    },
+                    {
+                        host: component2,
+                        cut: null,
+                        ratioWeight: 1,
+                        lanes: []
+                    }
+                    ]
+                },
+                {
+                    host: null,
+                    cut: 'h',
+                    ratioWeight: 1,
+                    lanes: [{
+                        host: component3,
+                        cut: null,
+                        ratioWeight: 1,
+                        lanes: []
+                    },
+                    {
+                        host: component4,
+                        cut: null,
+                        ratioWeight: 1,
+                        preferred: true,
+                        lanes: []
+                    }
+                    ]
+                }
+                ]
+            };
+
+        it('should have correct position and dimension of nodes', () => {
+            let layout = new LayoutModel({
+                width,
+                height
+            }, config);
+
+            layout.negotiate();
+            const node = layout.root.children[0];
+            expect(node.boundBox).to.deep.equal({ width: 320, height: 600, top: 0, left: 0 });
+        });
+    });
+
+    describe('#broadcast', () => {
+        const width = 600,
+            height = 600,
+            component1 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            component2 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            component3 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            component4 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            config = {
+                host: null,
+                cut: 'v',
+                ratioWeight: 1,
+                lanes: [{
+                    host: null,
+                    cut: 'h',
+                    ratioWeight: 1,
+                    preferred: true,
+                    lanes: [{
+                        host: component1,
+                        cut: null,
+                        ratioWeight: 1,
+                        preferred: true,
+                        lanes: []
+                    },
+                    {
+                        host: component2,
+                        cut: null,
+                        ratioWeight: 1,
+                        lanes: []
+                    }
+                    ]
+                },
+                {
+                    host: null,
+                    cut: 'h',
+                    ratioWeight: 1,
+                    lanes: [{
+                        host: component3,
+                        cut: null,
+                        ratioWeight: 1,
+                        lanes: []
+                    },
+                    {
+                        host: component4,
+                        cut: null,
+                        ratioWeight: 1,
+                        preferred: true,
+                        lanes: []
+                    }
+                    ]
+                }
+                ]
+            };
+
+        it('should have correct component boundBox', () => {
+            let layout = new LayoutModel({
+                width,
+                height
+            }, config);
+
+            layout.negotiate();
+            layout.broadcast();
+
+            expect(component1.newDimensions).to.deep.equal({ width: 320, height: 320 });
+        });
+    });
+
+    describe('#tree', () => {
+        const width = 600,
+            height = 600,
+            component1 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            component2 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            component3 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            component4 = new Component(10, {
+                width: width / 2,
+                height: width / 2
+            }),
+            config = {
+                host: null,
+                cut: 'v',
+                ratioWeight: 1,
+                lanes: [{
+                    host: null,
+                    cut: 'h',
+                    ratioWeight: 1,
+                    preferred: true,
+                    lanes: [{
+                        host: component1,
+                        cut: null,
+                        ratioWeight: 1,
+                        preferred: true,
+                        lanes: []
+                    },
+                    {
+                        host: component2,
+                        cut: null,
+                        ratioWeight: 1,
+                        lanes: []
+                    }
+                    ]
+                },
+                {
+                    host: null,
+                    cut: 'h',
+                    ratioWeight: 1,
+                    lanes: [{
+                        host: component3,
+                        cut: null,
+                        ratioWeight: 1,
+                        lanes: []
+                    },
+                    {
+                        host: component4,
+                        cut: null,
+                        ratioWeight: 1,
+                        preferred: true,
+                        lanes: []
+                    }
+                    ]
+                }
+                ]
+            };
+
+        it('should return the dep tree of nodes', () => {
+            let layout = new LayoutModel({
+                width,
+                height
+            }, config);
+
+            const rootNode = layout.tree();
+
+            expect(rootNode.children.length).to.deep.equal(2);
+        });
+    });
 });
