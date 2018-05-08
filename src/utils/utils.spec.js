@@ -43,7 +43,7 @@ describe('Utils', () => {
     });
 
     describe('#yExtraSpace', () => {
-        it('should return the correct vertical extra spcae', () => {
+        it('should return the correct vertical extra spcae for horizontal cut', () => {
             const width = 100,
                 height = 100;
             let comp1 = new DummyComponent(10, {
@@ -82,10 +82,88 @@ describe('Utils', () => {
 
             expect(yExtraSpace(root)).to.be.equal(40);
         });
+        it('should return the correct vertical extra spcae for vertical cut', () => {
+            const width = 100,
+                height = 100;
+            let comp1 = new DummyComponent(10, {
+                    width: width / 2,
+                    height
+                }),
+                comp2 = new DummyComponent(10, {
+                    width: width / 2,
+                    height
+                }),
+                layoutDef = {
+                    host: null,
+                    ratioWeight: 1,
+                    cut: 'v',
+                    lanes: [{
+                        host: comp1,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    },
+                    {
+                        host: comp2,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    }
+                    ]
+                },
+
+                layout = new LayoutModel({
+                    width,
+                    height
+                }, layoutDef),
+
+                root = layout.tree();
+
+            expect(yExtraSpace(root)).to.be.equal(20);
+        });
+        it('should return the correct extra spcae larger component', () => {
+            const width = 100,
+                height = 100;
+            let comp1 = new DummyComponent(10, {
+                    width: width + 10,
+                    height: height + 10
+                }),
+                comp2 = new DummyComponent(10, {
+                    width: width + 10,
+                    height: height + 10
+                }),
+                layoutDef = {
+                    host: null,
+                    ratioWeight: 1,
+                    cut: 'v',
+                    lanes: [{
+                        host: comp1,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    },
+                    {
+                        host: comp2,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    }
+                    ]
+                },
+
+                layout = new LayoutModel({
+                    width,
+                    height
+                }, layoutDef),
+
+                root = layout.tree();
+
+            expect(yExtraSpace(root)).to.be.equal(10);
+        });
     });
 
     describe('#xExtraSpace', () => {
-        it('should return the correct horizontal extra spcae', () => {
+        it('should return the correct horizontal extra spcae for vertical cut', () => {
             const width = 100,
                 height = 100;
             let comp1 = new DummyComponent(10, {
@@ -123,6 +201,84 @@ describe('Utils', () => {
                 root = layout.tree();
 
             expect(xExtraSpace(root)).to.be.equal(40);
+        });
+        it('should return the correct vertical extra spcae for horizontal cut', () => {
+            const width = 100,
+                height = 100;
+            let comp1 = new DummyComponent(10, {
+                    width: width / 2,
+                    height
+                }),
+                comp2 = new DummyComponent(10, {
+                    width: width / 2,
+                    height
+                }),
+                layoutDef = {
+                    host: null,
+                    ratioWeight: 1,
+                    cut: 'h',
+                    lanes: [{
+                        host: comp1,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    },
+                    {
+                        host: comp2,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    }
+                    ]
+                },
+
+                layout = new LayoutModel({
+                    width,
+                    height
+                }, layoutDef),
+
+                root = layout.tree();
+
+            expect(xExtraSpace(root)).to.be.equal(70);
+        });
+        it('should return the correct extra spcae larger component', () => {
+            const width = 100,
+                height = 100;
+            let comp1 = new DummyComponent(10, {
+                    width: width + 10,
+                    height
+                }),
+                comp2 = new DummyComponent(10, {
+                    width: width + 10,
+                    height
+                }),
+                layoutDef = {
+                    host: null,
+                    ratioWeight: 1,
+                    cut: 'h',
+                    lanes: [{
+                        host: comp1,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    },
+                    {
+                        host: comp2,
+                        ratioWeight: 1,
+                        cut: null,
+                        lanes: []
+                    }
+                    ]
+                },
+
+                layout = new LayoutModel({
+                    width,
+                    height
+                }, layoutDef),
+
+                root = layout.tree();
+
+            expect(xExtraSpace(root)).to.be.equal(10);
         });
     });
 
