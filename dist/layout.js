@@ -451,6 +451,44 @@ var Node = function () {
         value: function isPreferred() {
             return !!this.model.preferred;
         }
+
+        // method to update the Node Information
+
+    }, {
+        key: 'updateNode',
+        value: function updateNode(nodeconfig) {
+            var _this2 = this;
+
+            console.log('This and nodeConfig: ', this, nodeconfig);
+            if (this._id === nodeconfig._id) {
+                this.model.cut = nodeconfig.cut;
+                this.model.ratioWeight = nodeconfig.ratioWeight;
+            } else {
+                this.children.forEach(function (node) {
+                    console.log('Node of Each Children: ', node, nodeconfig);
+                    if (node._id === nodeconfig._id) {
+                        node.model.cut = nodeconfig.cut;
+                        node.model.ratioWeight = nodeconfig.ratioWeight;
+                        return;
+                    }
+                    _this2.searchNode(node, nodeconfig);
+                });
+            }
+        }
+    }, {
+        key: 'searchNode',
+        value: function searchNode(node, nodeconfig) {
+            var _this3 = this;
+
+            node.children.forEach(function (node1) {
+                if (node1._id === nodeconfig._id) {
+                    node1.model.cut = nodeconfig.cut;
+                    node1.model.ratioWeight = nodeconfig.ratioWeight;
+                } else {
+                    _this3.searchNode(node1, nodeconfig);
+                }
+            });
+        }
     }]);
 
     return Node;
@@ -469,14 +507,13 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* eslint-disable require-jsdoc */
-
-/* eslint no-undef: "off" */
-
-
-var _ = __webpack_require__(0);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/* eslint-disable require-jsdoc */
+
+/* eslint no-undef: "off" */
 
 var DummyComponent = function () {
     function DummyComponent(seed, dimensions) {
@@ -509,6 +546,9 @@ var DummyComponent = function () {
             };
             this.renderAt = conf.renderAt;
         }
+
+        /* istanbul ignore next */
+
     }, {
         key: 'draw',
         value: function draw() {
@@ -558,7 +598,7 @@ exports.default = _dummyComponent2.default;
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 /**
  * Compares two strings in lowercase
@@ -569,112 +609,112 @@ Object.defineProperty(exports, "__esModule", {
  * @return {boolean} true if values are equal
  */
 function isEqual(value, compareTo) {
-  if (typeof value !== 'string' || typeof compareTo !== 'string') {
-    throw new TypeError('value and compareTo must be string');
-  }
-  return value.toLowerCase() === compareTo.toLowerCase();
+    if (typeof value !== 'string' || typeof compareTo !== 'string') {
+        throw new TypeError('value and compareTo must be string');
+    }
+    return value.toLowerCase() === compareTo.toLowerCase();
 }
 
 var getNodeId = function () {
-  var _uid = 0;
-  return function () {
-    return 'node-' + ++_uid;
-  };
+    var _uid = 0;
+    return function () {
+        return 'node-' + ++_uid;
+    };
 }();
 
 function yExtraSpace(node) {
-  var smallestHeight = 0;
-  if (node.getCutType() === 'v') {
-    smallestHeight = smallestExtraHeightHorizontally(node);
-  } else if (node.getCutType() === 'h') {
-    node.children.forEach(function (child) {
-      smallestHeight += yExtraSpace(child);
-    });
-  } else if (node.model.host && node.model.host.getLogicalSpace) {
-    var containerHeight = node.boundBox.height,
-        hostHeight = node.model.host.getLogicalSpace().height;
+    var smallestHeight = 0;
+    if (node.getCutType() === 'v') {
+        smallestHeight = smallestExtraHeightHorizontally(node);
+    } else if (node.getCutType() === 'h') {
+        node.children.forEach(function (child) {
+            smallestHeight += yExtraSpace(child);
+        });
+    } else if (node.model.host && node.model.host.getLogicalSpace) {
+        var containerHeight = node.boundBox.height,
+            hostHeight = node.model.host.getLogicalSpace().height;
 
-    smallestHeight = containerHeight - hostHeight;
-    if (smallestHeight < 0) {
-      smallestHeight = 0;
+        smallestHeight = containerHeight - hostHeight;
+        if (smallestHeight < 0) {
+            smallestHeight = 0;
+        }
+    } else {
+        smallestHeight = 0;
     }
-  } else {
-    smallestHeight = 0;
-  }
-  return smallestHeight;
+    return smallestHeight;
 }
 
 function smallestExtraHeightHorizontally(node) {
-  var smallestHeight = Number.MAX_SAFE_INTEGER;
-  node.children.forEach(function (child) {
-    var h = yExtraSpace(child);
-    if (h < smallestHeight) {
-      smallestHeight = h;
-    }
-  });
-  return smallestHeight;
+    var smallestHeight = Number.MAX_SAFE_INTEGER;
+    node.children.forEach(function (child) {
+        var h = yExtraSpace(child);
+        if (h < smallestHeight) {
+            smallestHeight = h;
+        }
+    });
+    return smallestHeight;
 }
 
 function xExtraSpace(node) {
-  var smallestWidth = 0;
-  if (node.getCutType() === 'h') {
-    smallestWidth = smallestExtraWidthVertically(node);
-  } else if (node.getCutType() === 'v') {
-    node.children.forEach(function (child) {
-      smallestWidth += xExtraSpace(child);
-    });
-  } else if (node.model.host && node.model.host.getLogicalSpace) {
-    var containerWidth = node.boundBox.width,
-        hostWidth = node.model.host.getLogicalSpace().width;
-    smallestWidth = containerWidth - hostWidth;
-    if (smallestWidth < 0) {
-      smallestWidth = 0;
+    var smallestWidth = 0;
+    if (node.getCutType() === 'h') {
+        smallestWidth = smallestExtraWidthVertically(node);
+    } else if (node.getCutType() === 'v') {
+        node.children.forEach(function (child) {
+            smallestWidth += xExtraSpace(child);
+        });
+    } else if (node.model.host && node.model.host.getLogicalSpace) {
+        var containerWidth = node.boundBox.width,
+            hostWidth = node.model.host.getLogicalSpace().width;
+        smallestWidth = containerWidth - hostWidth;
+        if (smallestWidth < 0) {
+            smallestWidth = 0;
+        }
+    } else {
+        smallestWidth = 0;
     }
-  } else {
-    smallestWidth = 0;
-  }
-  return smallestWidth;
+    return smallestWidth;
 }
 
 function smallestExtraWidthVertically(node) {
-  var smallestWidth = Number.MAX_SAFE_INTEGER;
-  node.children.forEach(function (child) {
-    var w = xExtraSpace(child);
-    if (w < smallestWidth) {
-      smallestWidth = w;
-    }
-  });
-  return smallestWidth;
+    var smallestWidth = Number.MAX_SAFE_INTEGER;
+    node.children.forEach(function (child) {
+        var w = xExtraSpace(child);
+        if (w < smallestWidth) {
+            smallestWidth = w;
+        }
+    });
+    return smallestWidth;
 }
 
 function determineBoundBox(bb, i, arr, instance) {
-  if (i) {
-    // if not first sibling, take boundbox from previous sibling
-    var lastSibling = arr[i - 1];
+    if (i) {
+        // if not first sibling, take boundbox from previous sibling
+        var lastSibling = arr[i - 1];
+        return {
+            width: bb.width,
+            height: bb.height,
+
+            top: instance._parentCut === 'h' ? lastSibling.boundBox.top + lastSibling.boundBox.height : lastSibling.boundBox.top,
+
+            left: instance._parentCut === 'h' ? lastSibling.boundBox.left : lastSibling.boundBox.left + lastSibling.boundBox.width
+        };
+    }
+    // if first sibling, take boundbox from parent
     return {
-      width: bb.width,
-      height: bb.height,
-
-      top: instance._parentCut === 'h' ? lastSibling.boundBox.top + lastSibling.boundBox.height : lastSibling.boundBox.top,
-
-      left: instance._parentCut === 'h' ? lastSibling.boundBox.left : lastSibling.boundBox.left + lastSibling.boundBox.width
+        width: bb.width,
+        height: bb.height,
+        top: instance.parent.boundBox.top,
+        left: instance.parent.boundBox.left
     };
-  }
-  // if first sibling, take boundbox from parent
-  return {
-    width: bb.width,
-    height: bb.height,
-    top: instance.parent.boundBox.top,
-    left: instance.parent.boundBox.left
-  };
 }
 
 function getColor() {
-  var colors = ['#b71540', '#0c2461', '#079992', '#e55039', '#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e', '#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2c3e50', '#f1c40f', '#e67e22', '#e74c3c', '#ecf0f1', '#95a5a6', '#f39c12', '#d35400', '#c0392b', '#bdc3c7', '#7f8c8d'];
-  var min = 0,
-      max = colors.length - 1,
-      index = Math.floor(min + Math.random() * (max + 1 - min));
-  return colors[index];
+    var colors = ['#b71540', '#0c2461', '#079992', '#e55039', '#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e', '#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2c3e50', '#f1c40f', '#e67e22', '#e74c3c', '#ecf0f1', '#95a5a6', '#f39c12', '#d35400', '#c0392b', '#bdc3c7', '#7f8c8d'];
+    var min = 0,
+        max = colors.length - 1,
+        index = Math.floor(min + Math.random() * (max + 1 - min));
+    return colors[index];
 }
 
 exports.getColor = getColor;
