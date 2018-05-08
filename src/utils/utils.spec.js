@@ -43,7 +43,7 @@ describe('Utils', () => {
     });
 
     describe('#yExtraSpace', () => {
-        it('should return the correct vertical extra spcae for horizontal cut', () => {
+        it('should return the correct vertical extra space for horizontal cut', () => {
             const width = 100,
                 height = 100;
             let comp1 = new DummyComponent(10, {
@@ -82,7 +82,7 @@ describe('Utils', () => {
 
             expect(yExtraSpace(root)).to.be.equal(40);
         });
-        it('should return the correct vertical extra spcae for vertical cut', () => {
+        it('should return the correct vertical extra space for vertical cut', () => {
             const width = 100,
                 height = 100;
             let comp1 = new DummyComponent(10, {
@@ -121,7 +121,7 @@ describe('Utils', () => {
 
             expect(yExtraSpace(root)).to.be.equal(20);
         });
-        it('should return the correct extra spcae larger component', () => {
+        it('should return the correct extra space larger component', () => {
             const width = 100,
                 height = 100;
             let comp1 = new DummyComponent(10, {
@@ -163,7 +163,7 @@ describe('Utils', () => {
     });
 
     describe('#xExtraSpace', () => {
-        it('should return the correct horizontal extra spcae for vertical cut', () => {
+        it('should return the correct horizontal extra space for vertical cut', () => {
             const width = 100,
                 height = 100;
             let comp1 = new DummyComponent(10, {
@@ -202,7 +202,7 @@ describe('Utils', () => {
 
             expect(xExtraSpace(root)).to.be.equal(40);
         });
-        it('should return the correct vertical extra spcae for horizontal cut', () => {
+        it('should return the correct vertical extra space for horizontal cut', () => {
             const width = 100,
                 height = 100;
             let comp1 = new DummyComponent(10, {
@@ -241,7 +241,7 @@ describe('Utils', () => {
 
             expect(xExtraSpace(root)).to.be.equal(70);
         });
-        it('should return the correct extra spcae larger component', () => {
+        it('should return the correct extra space larger component', () => {
             const width = 100,
                 height = 100;
             let comp1 = new DummyComponent(10, {
@@ -283,7 +283,7 @@ describe('Utils', () => {
     });
 
     describe('#smallestExtraWidthVertically', () => {
-        it('should return the correct smallestExtraWidthVertically extra spcae', () => {
+        it('should return the correct smallestExtraWidthVertically extra space', () => {
             const width = 100,
                 height = 100;
             let comp1 = new DummyComponent(10, {
@@ -325,7 +325,7 @@ describe('Utils', () => {
     });
 
     describe('#smallestExtraHeightHorizontally', () => {
-        it('should return the correct smallestExtraHeightHorizontally extra spcae', () => {
+        it('should return the correct smallestExtraHeightHorizontally extra space', () => {
             const width = 100,
                 height = 100;
             let comp1 = new DummyComponent(10, {
