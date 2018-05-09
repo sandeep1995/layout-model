@@ -39,7 +39,7 @@ class Node {
 
     /**
      * function to search a node and update it with the config provided.
-     * @param  {} nodeconfig
+     * @param  {Object} nodeconfig
      */
     updateNode(nodeconfig) {
         if (this._id === nodeconfig._id)
@@ -72,6 +72,36 @@ class Node {
             else
             {
                 this.searchNode(node1, nodeconfig);
+            }
+        });
+    }
+
+    /**
+     * function to delete a node from tree Structure.
+     * @param  {String} nodeId - node Id of the Node
+     */
+    delete(nodeId) {
+        this.children.forEach((node) => {
+            if (node._id === nodeId)
+                {
+                let index = this.children.indexOf(node);
+                this.model.lanes.splice(index, 1);
+            }
+            this.deleteSearchNode(node, nodeId);
+        });
+    }
+
+    // Recursive function to search a node
+    deleteSearchNode(node, nodeId) {
+        node.children.forEach((node1) => {
+            if (node1._id === nodeId)
+            {
+                let index = node.children.indexOf(node1);
+                node.model.lanes.splice(index, 1);
+            }
+            else
+            {
+                this.deleteSearchNode(node1, nodeId);
             }
         });
     }
