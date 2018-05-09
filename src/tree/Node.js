@@ -39,7 +39,7 @@ class Node {
 
     /**
      * function to search a node and update it with the config provided.
-     * @param  {Object} nodeconfig
+     * @param  {Object} nodeconfig - configurations of the node to be updated.
      */
     updateNode(nodeconfig) {
         if (this._id === nodeconfig._id)
