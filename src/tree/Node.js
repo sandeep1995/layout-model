@@ -106,6 +106,43 @@ class Node {
         });
     }
 
+    /**
+     * function to add nodes to the tree.
+     * @param  {} nodeId - Node ID where to add the node.
+     * @param  {} nodeObj - New Node Configuration.
+     */
+    addNode(nodeId, nodeObj) {
+        if (this._id === nodeId)
+        {
+            this.model.lanes.push(nodeObj);
+        }
+        else
+        {
+            this.children.forEach((node) => {
+                if (node._id === nodeId)
+                {
+                    node.model.lanes.push(nodeObj);
+                    return;
+                }
+                this.addSearchNode(node, nodeId, nodeObj);
+            });
+        }
+    }
+
+    // Recursive function to search a node for adding a new Node
+    addSearchNode(node, nodeId, nodeObj) {
+        node.children.forEach((node1) => {
+            if (node1._id === nodeId)
+            {
+                node1.model.lanes.push(nodeObj);
+            }
+            else
+            {
+                this.searchNode(node1, nodeId, nodeObj);
+            }
+        });
+    }
+
 }
 
 export default Node;
