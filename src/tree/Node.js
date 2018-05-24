@@ -14,6 +14,8 @@ class Node {
         };
 
         this._id = getNodeId();
+
+        this.model._id = this._id;
     }
 
     addChildren(entries) {
@@ -49,25 +51,24 @@ class Node {
         }
         else
         {
-            this.children.forEach((node) => {
+            this.model.lanes.forEach((node) => {
                 if (node._id === nodeconfig._id)
                 {
-                    node.model.cut = nodeconfig.cut;
-                    node.model.ratioWeight = nodeconfig.ratioWeight;
-                    return;
+                    node.cut = nodeconfig.cut;
+                    node.ratioWeight = nodeconfig.ratioWeight;
                 }
                 this.searchNode(node, nodeconfig);
             });
         }
     }
 
-    // Recursive function to search a node
+    // Recursive function to search a node for updating a node.
     searchNode(node, nodeconfig) {
-        node.children.forEach((node1) => {
+        node.lanes.forEach((node1) => {
             if (node1._id === nodeconfig._id)
             {
-                node1.model.cut = nodeconfig.cut;
-                node1.model.ratioWeight = nodeconfig.ratioWeight;
+                node1.cut = nodeconfig.cut;
+                node1.ratioWeight = nodeconfig.ratioWeight;
             }
             else
             {
@@ -81,23 +82,25 @@ class Node {
      * @param  {String} nodeId - node Id of the Node
      */
     delete(nodeId) {
-        this.children.forEach((node) => {
+        this.model.lanes.forEach((node) => {
             if (node._id === nodeId)
                 {
-                let index = this.children.indexOf(node);
+                // let index = this.children.indexOf(node);
+                let index = this.model.lanes.indexOf(node);
                 this.model.lanes.splice(index, 1);
             }
             this.deleteSearchNode(node, nodeId);
         });
     }
 
-    // Recursive function to search a node
+    // Recursive function to search a node for deleting a node
     deleteSearchNode(node, nodeId) {
-        node.children.forEach((node1) => {
+        node.lanes.forEach((node1) => {
             if (node1._id === nodeId)
             {
-                let index = node.children.indexOf(node1);
-                node.model.lanes.splice(index, 1);
+                // let index = node.children.indexOf(node1);
+                let index = node.lanes.indexOf(node1);
+                node.lanes.splice(index, 1);
             }
             else
             {
@@ -109,36 +112,84 @@ class Node {
     /**
      * function to add nodes to the tree.
      * @param  {} nodeId - Node ID where to add the node.
-     * @param  {} nodeObj - New Node Configuration.
+     * @param  {} nodeArray - New Node Configuration array.
      */
-    addNode(nodeId, nodeObj) {
+    addNode(nodeId, nodeArray) {
         if (this._id === nodeId)
         {
-            this.model.lanes.push(nodeObj);
+            this.host = null;
+            nodeArray.forEach((tempNode) => {
+                this.model.lanes.push(tempNode);
+            });
+            // this.model.lanes.push(nodeObj);
         }
         else
         {
-            this.children.forEach((node) => {
+            this.model.lanes.forEach((node) => {
                 if (node._id === nodeId)
                 {
-                    node.model.lanes.push(nodeObj);
-                    return;
+                    node.host = null;
+                    nodeArray.forEach((tempNode) => {
+                        node.lanes.push(tempNode);
+                    });
+                    // node.lanes.push(nodeObj);
                 }
-                this.addSearchNode(node, nodeId, nodeObj);
+                this.addSearchNode(node, nodeId, nodeArray);
             });
         }
     }
 
     // Recursive function to search a node for adding a new Node
-    addSearchNode(node, nodeId, nodeObj) {
-        node.children.forEach((node1) => {
+    addSearchNode(node, nodeId, nodeArray) {
+        node.lanes.forEach((node1) => {
             if (node1._id === nodeId)
             {
-                node1.model.lanes.push(nodeObj);
+                node1.host = null;
+                nodeArray.forEach((tempNode) => {
+                    node1.lanes.push(tempNode);
+                });
+                // node1.lanes.push(nodeObj);
+            }
+            else {
+                this.addSearchNode(node1, nodeId, nodeArray);
+            }
+        });
+    }
+
+    /**
+     * function to get the Node Information
+     * @param  {} nodeId - ID of the Node.
+     */
+    getNode(nodeId) {
+        this.nodeInfo = null;
+        if (this._id === nodeId)
+        {
+            this.nodeInfo = this.model;
+        }
+        else
+        {
+            this.model.lanes.forEach((node) => {
+                if (node._id === nodeId)
+                {
+                    this.nodeInfo = node;
+                }
+                this.getSearchNode(node, nodeId);
+            });
+        }
+        return this.nodeInfo;
+    }
+
+
+    // Recursive function to search a node for adding a new Node
+    getSearchNode(node, nodeId) {
+        node.lanes.forEach((node1) => {
+            if (node1._id === nodeId)
+            {
+                this.nodeInfo = node1;
             }
             else
             {
-                this.searchNode(node1, nodeId, nodeObj);
+                this.getSearchNode(node1, nodeId);
             }
         });
     }

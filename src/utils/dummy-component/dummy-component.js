@@ -8,6 +8,7 @@ class DummyComponent {
         this.dimensions = dimensions;
         this.position = null;
         this.renderAt = null;
+        this.type = 'placeHolder';
     }
 
     getLogicalSpace() {
@@ -32,10 +33,15 @@ class DummyComponent {
     /* istanbul ignore next */
 
     draw() {
+        if (document.getElementById(`placeholder${this.renderAt}`) !== null)
+           { document.getElementById(`placeholder${this.renderAt}`).remove(); }
+        if (document.getElementById(`component${this.renderAt}`) !== null)
+           { document.getElementById(`component${this.renderAt}`).remove(); }
         let doc = document.getElementById(this.renderAt),
             div = document.createElement('div'),
             width = Math.max(this.dimensions.width, this.newDimensions.width),
             height = Math.max(this.dimensions.height, this.newDimensions.height);
+        div.setAttribute('id', `component${this.renderAt}`);
 
         div.style.backgroundColor = '#fab1a0'; // getColor();
 

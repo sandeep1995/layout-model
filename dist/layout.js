@@ -399,6 +399,8 @@ var Node = function () {
         };
 
         this._id = (0, _utils.getNodeId)();
+
+        this.model._id = this._id;
     }
 
     _createClass(Node, [{
@@ -435,7 +437,7 @@ var Node = function () {
 
         /**
          * function to search a node and update it with the config provided.
-         * @param  {Object} nodeconfig
+         * @param  {Object} nodeconfig - configurations of the node to be updated.
          */
 
     }, {
@@ -447,28 +449,27 @@ var Node = function () {
                 this.model.cut = nodeconfig.cut;
                 this.model.ratioWeight = nodeconfig.ratioWeight;
             } else {
-                this.children.forEach(function (node) {
+                this.model.lanes.forEach(function (node) {
                     if (node._id === nodeconfig._id) {
-                        node.model.cut = nodeconfig.cut;
-                        node.model.ratioWeight = nodeconfig.ratioWeight;
-                        return;
+                        node.cut = nodeconfig.cut;
+                        node.ratioWeight = nodeconfig.ratioWeight;
                     }
                     _this2.searchNode(node, nodeconfig);
                 });
             }
         }
 
-        // Recursive function to search a node
+        // Recursive function to search a node for updating a node.
 
     }, {
         key: 'searchNode',
         value: function searchNode(node, nodeconfig) {
             var _this3 = this;
 
-            node.children.forEach(function (node1) {
+            node.lanes.forEach(function (node1) {
                 if (node1._id === nodeconfig._id) {
-                    node1.model.cut = nodeconfig.cut;
-                    node1.model.ratioWeight = nodeconfig.ratioWeight;
+                    node1.cut = nodeconfig.cut;
+                    node1.ratioWeight = nodeconfig.ratioWeight;
                 } else {
                     _this3.searchNode(node1, nodeconfig);
                 }
@@ -485,28 +486,121 @@ var Node = function () {
         value: function _delete(nodeId) {
             var _this4 = this;
 
-            this.children.forEach(function (node) {
+            this.model.lanes.forEach(function (node) {
                 if (node._id === nodeId) {
-                    var index = _this4.children.indexOf(node);
+                    // let index = this.children.indexOf(node);
+                    var index = _this4.model.lanes.indexOf(node);
                     _this4.model.lanes.splice(index, 1);
                 }
                 _this4.deleteSearchNode(node, nodeId);
             });
         }
 
-        // Recursive function to search a node
+        // Recursive function to search a node for deleting a node
 
     }, {
         key: 'deleteSearchNode',
         value: function deleteSearchNode(node, nodeId) {
             var _this5 = this;
 
-            node.children.forEach(function (node1) {
+            node.lanes.forEach(function (node1) {
                 if (node1._id === nodeId) {
-                    var index = node.children.indexOf(node1);
-                    node.model.lanes.splice(index, 1);
+                    // let index = node.children.indexOf(node1);
+                    var index = node.lanes.indexOf(node1);
+                    node.lanes.splice(index, 1);
                 } else {
                     _this5.deleteSearchNode(node1, nodeId);
+                }
+            });
+        }
+
+        /**
+         * function to add nodes to the tree.
+         * @param  {} nodeId - Node ID where to add the node.
+         * @param  {} nodeArray - New Node Configuration array.
+         */
+
+    }, {
+        key: 'addNode',
+        value: function addNode(nodeId, nodeArray) {
+            var _this6 = this;
+
+            if (this._id === nodeId) {
+                this.host = null;
+                nodeArray.forEach(function (tempNode) {
+                    _this6.model.lanes.push(tempNode);
+                });
+                // this.model.lanes.push(nodeObj);
+            } else {
+                this.model.lanes.forEach(function (node) {
+                    if (node._id === nodeId) {
+                        node.host = null;
+                        nodeArray.forEach(function (tempNode) {
+                            node.lanes.push(tempNode);
+                        });
+                        // node.lanes.push(nodeObj);
+                    }
+                    _this6.addSearchNode(node, nodeId, nodeArray);
+                });
+            }
+        }
+
+        // Recursive function to search a node for adding a new Node
+
+    }, {
+        key: 'addSearchNode',
+        value: function addSearchNode(node, nodeId, nodeArray) {
+            var _this7 = this;
+
+            node.lanes.forEach(function (node1) {
+                if (node1._id === nodeId) {
+                    node1.host = null;
+                    nodeArray.forEach(function (tempNode) {
+                        node1.lanes.push(tempNode);
+                    });
+                    // node1.lanes.push(nodeObj);
+                } else {
+                    _this7.addSearchNode(node1, nodeId, nodeArray);
+                }
+            });
+        }
+
+        /**
+         * function to get the Node Information
+         * @param  {} nodeId - ID of the Node.
+         */
+
+    }, {
+        key: 'getNode',
+        value: function getNode(nodeId) {
+            var _this8 = this;
+
+            this.nodeInfo = null;
+            if (this._id === nodeId) {
+                this.nodeInfo = this.model;
+            } else {
+                this.model.lanes.forEach(function (node) {
+                    if (node._id === nodeId) {
+                        _this8.nodeInfo = node;
+                    }
+                    _this8.getSearchNode(node, nodeId);
+                });
+            }
+            return this.nodeInfo;
+        }
+
+        // Recursive function to search a node for adding a new Node
+
+    }, {
+        key: 'getSearchNode',
+        value: function getSearchNode(node, nodeId) {
+            var _this9 = this;
+
+            node.lanes.forEach(function (node1) {
+                if (node1._id === nodeId) {
+                    _this9.nodeInfo = node1;
+                } else {
+                    _this9.getSearchNode(node1, nodeId);
                 }
             });
         }
@@ -563,6 +657,7 @@ var DummyComponent = function () {
         this.dimensions = dimensions;
         this.position = null;
         this.renderAt = null;
+        this.type = 'placeHolder';
     }
 
     _createClass(DummyComponent, [{
@@ -592,10 +687,17 @@ var DummyComponent = function () {
     }, {
         key: 'draw',
         value: function draw() {
+            if (document.getElementById('placeholder' + this.renderAt) !== null) {
+                document.getElementById('placeholder' + this.renderAt).remove();
+            }
+            if (document.getElementById('component' + this.renderAt) !== null) {
+                document.getElementById('component' + this.renderAt).remove();
+            }
             var doc = document.getElementById(this.renderAt),
                 div = document.createElement('div'),
                 width = Math.max(this.dimensions.width, this.newDimensions.width),
                 height = Math.max(this.dimensions.height, this.newDimensions.height);
+            div.setAttribute('id', 'component' + this.renderAt);
 
             div.style.backgroundColor = '#fab1a0'; // getColor();
 

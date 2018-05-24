@@ -11,7 +11,7 @@
     "indent": ["error", 4, { "MemberExpression": 4 }],
     "space-before-function-paren": "off",
     "no-multi-assign": "off",
-    "max-len": ["error", 120],
+    "max-len": ["error", 140],
     "one-var": ["error", "always"],
     "no-plusplus": "off",
     "no-unused-expressions": "off",
